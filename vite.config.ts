@@ -17,8 +17,8 @@ export default defineConfig({
         host: process.env.HOST,
         port: Number(process.env.PORT)
     },
-    build: {
-        outDir: 'build'
+    preview: {
+        port: 8080
     },
     define: {
         "process.env.BACKEND_ENDPOINT": JSON.stringify(process.env.BACKEND_ENDPOINT),
