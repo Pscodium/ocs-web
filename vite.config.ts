@@ -14,7 +14,7 @@ export default defineConfig({
         },
     },
     server: {
-        port: process.env.NODE_ENV == "production" ? 80 : 2304
+        port: Number(process.env.PORT)
     },
     define: {
         "process.env.BACKEND_ENDPOINT": JSON.stringify(process.env.BACKEND_ENDPOINT),
