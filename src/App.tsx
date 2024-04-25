@@ -1,4 +1,3 @@
-import react from 'react';
 import Router from './routes/config';
 
 function App() {
