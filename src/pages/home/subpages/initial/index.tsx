@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface InitialProps {}
 
 export default function Initial() {
