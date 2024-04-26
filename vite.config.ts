@@ -13,13 +13,6 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
-    server: {
-        host: process.env.HOST,
-        port: Number(process.env.PORT)
-    },
-    preview: {
-        port: 8080
-    },
     define: {
         "process.env.BACKEND_ENDPOINT": JSON.stringify(process.env.BACKEND_ENDPOINT),
     }
