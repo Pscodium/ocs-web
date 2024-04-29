@@ -4,13 +4,21 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { GoHome } from "react-icons/go";
 import { LiaToolsSolid } from "react-icons/lia";
-import { SlSettings } from "react-icons/sl";
+import { SlLogin, SlLogout, SlSettings } from "react-icons/sl";
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/auth';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-export interface SidebarProps extends React.HTMLAttributes<HTMLElement> { }
+export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
+    handleLoginDialog: () => void;
+    logout: () => Promise<boolean>;
+}
 
 export default function Sidebar(props: SidebarProps) {
+    const { isLogged, user } = useAuth();
+
     return (
         <div className={props.className}>
             <div className='flex flex-col items-center w-[100vw]'>
@@ -57,6 +65,29 @@ export default function Sidebar(props: SidebarProps) {
                         </NavLink>
                     </div>
                 </ScrollArea>
+                <div className='absolute flex bottom-0 w-[100%] p-4 items-center justify-center'>
+                    {isLogged ?
+                        <div className='flex flex-row gap-5 justify-between items-center w-[100%]'>
+                            <div onClick={() => { }} className='flex flex-row items-center gap-4 cursor-pointer'>
+                                <Avatar className='rounded-[5px] p-0.5 outline-core-secondary outline outline-[1.3px]'>
+                                    <AvatarImage className='rounded' src={user?.profileIcon || ''} />
+                                    <AvatarFallback>DP</AvatarFallback>
+                                </Avatar>
+                                <Label className='text-black text-md cursor-pointer select-none'>
+                                    {user?.nickname}
+                                </Label>
+                            </div>
+                            <Button onClick={props.logout} className='p-2 bg-slate-50 text-black hover:text-slate-500 hover:bg-slate-50'>
+                                <SlLogout />
+                            </Button>
+                        </div>
+                        :
+                        <Button onClick={props.handleLoginDialog} className='bg-slate-50 gap-3 hover:bg-slate-50 hover fill-black text-black hover:text-slate-500 hover:fill-slate-500'>
+                            <SlLogin />
+                            <Label className='font-normal cursor-pointer'>Login</Label>
+                        </Button>
+                    }
+                </div>
             </div>
         </div>
     );
