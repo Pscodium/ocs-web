@@ -15,8 +15,5 @@ export default defineConfig({
     },
     server: {
         port: Number(process.env.PORT)
-    },
-    define: {
-        "process.env.BACKEND_ENDPOINT": JSON.stringify(process.env.BACKEND_ENDPOINT),
     }
 });

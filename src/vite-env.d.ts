@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-    readonly BACKEND_ENDPOINT: string
+    readonly VITE_BACKEND_ENDPOINT: string
 }
 
 interface ImportMeta {
