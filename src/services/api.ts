@@ -105,9 +105,9 @@ class ApiService {
     }
 
     async logout() {
-        this.api.defaults.withCredentials = true;
         const res = await this.api.get('/logout', {
-            headers: this.getHeaders()
+            headers: this.getHeaders(),
+            withCredentials: true
         });
 
         if (res.status != 200) {
