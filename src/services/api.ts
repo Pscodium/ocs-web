@@ -113,8 +113,6 @@ class ApiService {
             throw new Error('Unexpected error on get logout');
         }
 
-        document.cookie = 'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-
         return res.data.success;
     }
 }
