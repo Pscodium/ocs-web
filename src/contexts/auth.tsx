@@ -47,6 +47,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
             if (logout) {
                 setLogged(false);
+                window.location.reload();
                 return;
             }
         } catch (err) {
