@@ -2,9 +2,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
+import useDidMount from "@/hooks/react/useMount";
 import { apiService, UserProps, LoginProps } from "@/services/api";
 import { AxiosResponse } from "axios";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { UseMutateFunction } from "react-query";
 
 interface LoginPropsMutation extends LoginProps {
@@ -15,7 +16,6 @@ interface AuthContextProps {
     user: UserProps | null;
     Login: ({ email, password, mutate }: LoginPropsMutation) => void;
     Logout: () => void;
-    CheckAuth: () => void;
     isLogged: boolean;
 }
 
@@ -24,7 +24,6 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<UserProps | null>(null);
     const [logged, setLogged] = useState(false);
-    const [checkedAuth, setCheckedAuth] = useState(false);
 
     async function Login({ email, password, mutate }: LoginPropsMutation) {
         mutate({ email, password }, {
@@ -47,37 +46,28 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
             if (logout) {
                 setLogged(false);
-                window.location.reload();
                 return;
             }
         } catch (err) {
-            console.log(err);
             return false;
         }
     }
 
-    async function checkAuth() {
+    useDidMount(async () => {
         try {
             const loggedUser = await apiService.checkAuth();
 
-            if (loggedUser) {
-                setUser(loggedUser);
-                setLogged(true);
-            } else {
-                setLogged(false);
+            if (!loggedUser) {
+                return;
             }
-        } catch (err) {
-            setLogged(false);
-        } finally {
-            setCheckedAuth(true);
-        }
-    }
 
-    useEffect(() => {
-        if (!checkedAuth) {
-            checkAuth();
+            setUser(loggedUser);
+            setLogged(true);
+        } catch (err) {
+            setUser(null);
+            setLogged(false);
         }
-    }, [checkedAuth]);
+    });
 
     return (
         <AuthContext.Provider
@@ -85,8 +75,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
                 user,
                 Login,
                 Logout,
-                isLogged: logged,
-                CheckAuth: checkAuth
+                isLogged: logged
             }}
         >
             <>{children}</>
