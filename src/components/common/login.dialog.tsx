@@ -9,20 +9,25 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import FloatingLabelInput from '@/components/ui/floating-label';
-import { LoginInputProps } from '..';
+import { useAuth } from '@/contexts/auth';
+import { useLoginDialog } from '@/contexts/login.dialog';
 
-interface LoginDialogProps {
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    open: boolean;
-    inputs: LoginInputProps;
-    setInputs: React.Dispatch<React.SetStateAction<LoginInputProps>>;
-    submitLogin: (email: string, password: string) => Promise<boolean>;
+export interface LoginInputProps {
+    email: string | undefined;
+    password: string | undefined;
 }
 
-export default function LoginDialog({ open, setOpen, inputs, setInputs, submitLogin }: LoginDialogProps) {
+
+export default function LoginDialog() {
     const [cantCompleteLogin, setCantCompleteLogin] = useState(false);
     const [completedEmail, setCompletedEmail] = useState(true);
     const [completedPassword, setCompletedPassword] = useState(true);
+    const [inputs, setInputs] = useState<LoginInputProps>({
+        email: undefined,
+        password: undefined,
+    });
+    const { Login } = useAuth();
+    const { setOpen, isOpen } = useLoginDialog();
 
     function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.key === 'Enter') {
@@ -44,13 +49,19 @@ export default function LoginDialog({ open, setOpen, inputs, setInputs, submitLo
             return;
         }
 
-        const logged = await submitLogin(inputs.email, inputs.password);
-
-        if (logged) {
-            setOpen(!open);
-            return;
-        } else {
+        try {
+            const login = await Login({
+                email: inputs.email,
+                password: inputs.password,
+            });
+            if (!login) {
+                return setCantCompleteLogin(true);
+            }
             setCantCompleteLogin(false);
+
+            return;
+        } catch (err) {
+            setCantCompleteLogin(true);
             return;
         }
     }
@@ -68,7 +79,7 @@ export default function LoginDialog({ open, setOpen, inputs, setInputs, submitLo
     }, [inputs]);
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={isOpen} onOpenChange={setOpen}>
             <DialogContent onKeyDown={handleKeyPress} className='bg-slate-50 outline-none border-none'>
                 <DialogTitle className="text-[24px] text-black">Login</DialogTitle>
                 <DialogDescription className="text-[12px] text-black">

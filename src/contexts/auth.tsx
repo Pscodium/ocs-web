@@ -2,19 +2,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
+import { useToast } from "@/components/ui/use-toast";
 import useDidMount from "@/hooks/react/useMount";
 import { apiService, UserProps, LoginProps } from "@/services/api";
-import { AxiosResponse } from "axios";
 import React, { createContext, useContext, useState } from "react";
-import { UseMutateFunction } from "react-query";
+import { useLoginDialog } from "./login.dialog";
 
-interface LoginPropsMutation extends LoginProps {
-    mutate: UseMutateFunction<AxiosResponse<UserProps, UserProps>, unknown, LoginProps, unknown>
-}
+interface LoginPropsMutation extends LoginProps {}
 
 interface AuthContextProps {
     user: UserProps | null;
-    Login: ({ email, password, mutate }: LoginPropsMutation) => void;
+    Login: ({ email, password }: LoginPropsMutation) => Promise<boolean>;
     Logout: () => void;
     isLogged: boolean;
 }
@@ -23,21 +21,51 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<UserProps | null>(null);
+    const { toast } = useToast();
     const [logged, setLogged] = useState(false);
+    const { closeDialog } = useLoginDialog();
 
-    async function Login({ email, password, mutate }: LoginPropsMutation) {
-        mutate({ email, password }, {
-            onSuccess: ({ data }) => {
-                if (data) {
-                    setUser(data);
-                    setLogged(true);
-                }
-            },
-            onError: (err) => {
+
+    async function Login({ email, password }: LoginPropsMutation) {
+        try {
+
+            const user = await apiService.login({ email, password });
+            if (!user) {
                 setLogged(false);
-                console.error(err);
+                toast({
+                    variant: "destructive",
+                    title: "Oh damn. An error has occurred",
+                    description: "You tried to log in but something shit happened...",
+                    className: "outline-none border-none bg-red-600 text-slate-200",
+                });
+                return false;
             }
-        });
+
+            setUser(user.data);
+            setLogged(true);
+            closeDialog();
+
+            toast({
+                variant: "destructive",
+                title: "Hell yeah! You are inside me",
+                description: "You have successfully logged in you bastard fagot...",
+                className: "outline-none border-none bg-green-600 text-slate-200",
+            });
+
+            return true;
+        } catch (err) {
+            setLogged(false);
+            console.error(err);
+
+            toast({
+                variant: "destructive",
+                title: "Oh damn. An error has occurred",
+                description: "You tried to log in but something shit happened...",
+                className: "outline-none border-none bg-red-600 text-slate-200",
+            });
+
+            return false;
+        }
     }
 
     async function Logout() {
@@ -46,9 +74,21 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
             if (logout) {
                 setLogged(false);
+                toast({
+                    variant: "destructive",
+                    title: "Bye bye little bitch!!",
+                    description: "You just logged out, now go to hell...",
+                    className: "outline-none border-none bg-green-600 text-slate-200",
+                });
                 return;
             }
         } catch (err) {
+            toast({
+                variant: "destructive",
+                title: "Oh damn. An error has occurred",
+                description: "You tried to log out but something shit happened...",
+                className: "outline-none border-none bg-red-600 text-slate-200",
+            });
             return false;
         }
     }

@@ -10,14 +10,14 @@ import { ScrollArea } from '@radix-ui/react-scroll-area';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useLoginDialog } from '@/contexts/login.dialog';
 
-export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
-    handleLoginDialog: () => void;
-    logout: () => Promise<boolean>;
-}
+export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {}
 
 export default function Sidebar(props: SidebarProps) {
     const { isLogged, user } = useAuth();
+    const { Logout } = useAuth();
+    const { openDialog } = useLoginDialog();
 
     return (
         <div className={props.className}>
@@ -77,12 +77,12 @@ export default function Sidebar(props: SidebarProps) {
                                     {user?.nickname}
                                 </Label>
                             </div>
-                            <Button onClick={props.logout} className='p-2 bg-slate-50 text-black hover:text-slate-500 hover:bg-slate-50'>
+                            <Button onClick={Logout} className='p-2 bg-slate-50 text-black hover:text-slate-500 hover:bg-slate-50'>
                                 <SlLogout />
                             </Button>
                         </div>
                         :
-                        <Button onClick={props.handleLoginDialog} className='bg-slate-50 gap-3 hover:bg-slate-50 hover fill-black text-black hover:text-slate-500 hover:fill-slate-500'>
+                        <Button onClick={openDialog} className='bg-slate-50 gap-3 hover:bg-slate-50 hover fill-black text-black hover:text-slate-500 hover:fill-slate-500'>
                             <SlLogin />
                             <Label className='font-normal cursor-pointer'>Login</Label>
                         </Button>
