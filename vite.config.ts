@@ -15,5 +15,6 @@ export default defineConfig({
     },
     server: {
         port: Number(process.env.PORT)
-    }
+    },
+    assetsInclude: ['**/*.md']
 });
