@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { useRef, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { FaCopy } from "react-icons/fa6";
+import { TbReload } from "react-icons/tb";
 
 export interface UuidGeneratorProps { }
 
@@ -26,20 +27,20 @@ export default function UuidGenerator() {
     };
 
     return (
-        <div className="min-h-screen w-full items-center justify-center flex">
-            <div className="p-10 max-w-[80%] rounded-md bg-core-light">
+        <div className="min-h-screen w-full items-center justify-center flex pt-4 pr-10 pb-4 pl-10 rounded-lg sm:py-2">
+            <div className="shadow-xl p-10 max-w-[80%] rounded-md bg-white">
                 <Label className="text-[30px]">UUID Generator</Label>
                 <p>Discover the simplicity of generating UUIDs effortlessly with our tool. Craft unique identifiers seamlessly for your projects, ensuring data integrity and efficiency. Say goodbye to duplication headaches and embrace precision with our user-friendly UUID generator.</p>
-                <div className="pt-6 flex flex-row gap-3">
+                <div className="pt-6 flex flex-row gap-3 items-center">
                     <div className="relative w-full h-[45px]">
                         <input
                             ref={inputRef}
                             type='text'
                             value={uuid}
-                            className="w-full px-3 font-normal text-[22px] h-full rounded-md border-1 border border-core-secondary focus:outline-none outline-none bg-core-light"
+                            className="w-full px-3 font-normal text-[22px] h-full rounded-md border-1 border border-gray-300 focus:outline-none outline-none bg-white"
                             readOnly
                         />
-                        <Button className="absolute inset-y-0 right-1 self-center bg-core-primary hover:bg-core-secondary" size='sm' onClick={copyToClipboard}>
+                        <Button className="absolute inset-y-0 right-1 self-center bg-core-secondary hover:bg-core-light" size='sm' onClick={copyToClipboard}>
                             {successCopy ?
                                 <FaCheck />
                                 :
@@ -47,7 +48,10 @@ export default function UuidGenerator() {
                             }
                         </Button>
                     </div>
-                    <Button className="bg-core-primary hover:bg-core-secondary" onClick={generateUUID}>Generate UUID</Button>
+                    <Button className="bg-core-primary hover:bg-core-secondary h-[45px] gap-2" onClick={generateUUID}>
+                        <TbReload size={20} />
+                        <Label className="text-[16px]">Generate</Label>
+                    </Button>
                 </div>
             </div>
         </div>

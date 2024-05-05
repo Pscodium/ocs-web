@@ -73,12 +73,12 @@ export default function Sidebar(props: SidebarProps) {
                                     {user?.nickname}
                                 </Label>
                             </div>
-                            <Button onClick={Logout} className='p-2 bg-slate-50 text-black hover:text-slate-500 hover:bg-slate-50'>
+                            <Button onClick={Logout} className='p-2 bg-white text-black hover:text-slate-500 hover:bg-white'>
                                 <SlLogout />
                             </Button>
                         </div>
                         :
-                        <Button onClick={openDialog} className='bg-slate-50 gap-3 hover:bg-slate-50 hover fill-black text-black hover:text-slate-500 hover:fill-slate-500'>
+                        <Button onClick={openDialog} className='bg-white gap-3 hover:bg-white hover fill-black text-black hover:text-slate-500 hover:fill-slate-500'>
                             <SlLogin />
                             <Label className='font-normal cursor-pointer'>Login</Label>
                         </Button>

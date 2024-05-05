@@ -80,14 +80,14 @@ export default function LoginDialog() {
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpen}>
-            <DialogContent onKeyDown={handleKeyPress} className='bg-slate-50 outline-none border-none'>
+            <DialogContent onKeyDown={handleKeyPress} className='bg-white outline-none border-none'>
                 <DialogTitle className="text-[24px] text-black">Login</DialogTitle>
                 <DialogDescription className="text-[12px] text-black">
                     Realize seu login
                 </DialogDescription>
                 <div className='flex flex-col gap-4'>
-                    <FloatingLabelInput onKeyDown={handleKeyPress} invalid={!completedEmail || cantCompleteLogin} text={inputs.email} onChange={(ev) => setInputs({ ...inputs, email: ev.target.value })} label='E-mail' className='!bg-slate-50' />
-                    <FloatingLabelInput onKeyDown={handleKeyPress} invalid={!completedPassword || cantCompleteLogin} text={inputs.password} onChange={(ev) => setInputs({ ...inputs, password: ev.target.value })} label='Password' type='password' security='*' className='!bg-slate-50' />
+                    <FloatingLabelInput onKeyDown={handleKeyPress} invalid={!completedEmail || cantCompleteLogin} text={inputs.email} onChange={(ev) => setInputs({ ...inputs, email: ev.target.value })} label='E-mail' className='!bg-white' />
+                    <FloatingLabelInput onKeyDown={handleKeyPress} invalid={!completedPassword || cantCompleteLogin} text={inputs.password} onChange={(ev) => setInputs({ ...inputs, password: ev.target.value })} label='Password' type='password' security='*' className='!bg-white' />
                 </div>
                 <div className="flex gap-3">
                     <DialogTrigger>

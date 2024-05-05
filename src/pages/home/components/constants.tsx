@@ -1,12 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GoHome } from "react-icons/go";
 import { LiaToolsSolid } from "react-icons/lia";
 import { SlSettings } from "react-icons/sl";
 import { IoChevronDown } from "react-icons/io5";
-import React from "react";
+import { FaCode } from "react-icons/fa6";
+import { AiOutlineFileMarkdown } from "react-icons/ai";
+import React, { ReactElement } from "react";
 
 export interface SubMenuProps {
     title: string;
     path: string;
+    beta?: boolean;
+    new?: boolean;
+    description: string;
+    icon: ReactElement<any, any>;
 }
 
 export interface SidebarItems {
@@ -34,11 +41,16 @@ export const SIDEBAR_ITEMS: SidebarItems[] = [
         submenuItems: [
             {
                 title: 'Markdown',
-                path: '/tools/markdown'
+                path: '/tools/markdown',
+                description: "Markdown editor",
+                icon: <AiOutlineFileMarkdown />
             },
             {
                 title: 'Uuid Generator',
-                path: '/tools/uuid'
+                new: true,
+                path: '/tools/uuid',
+                description: "Generates a random uuid v4",
+                icon: <FaCode />
             }
         ]
     },

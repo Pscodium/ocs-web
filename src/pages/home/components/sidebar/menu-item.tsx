@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { SidebarItems } from '../constants';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
 
 export interface MenuItemAttributes {
     item: SidebarItems;
@@ -47,8 +48,18 @@ export default function MenuItem({ item }: MenuItemAttributes) {
                                             isActive ? 'flex flex-row items-center justify-between p-3 rounded-lg w-[100%] bg-core-light text-core-primary' : 'flex flex-row items-center justify-between p-3 w-[100%]'
                                         }
                                     >
-                                        <div className='flex flex-row gap-2 items-center'>
+                                        <div className='flex flex-row gap-2 items-center justify-between w-full'>
                                             <Label className='text-[16px] font-normal cursor-pointer'>{i.title}</Label>
+                                            {i.beta && (
+                                                <div>
+                                                    <Badge className='bg-core-secondary py-1 hover:bg-core-secondary' variant='default'>BETA</Badge>
+                                                </div>
+                                            )}
+                                            {i.new && (
+                                                <div>
+                                                    <Badge className='bg-core-secondary py-1 hover:bg-core-secondary' variant='default'>NEW</Badge>
+                                                </div>
+                                            )}
                                         </div>
                                     </NavLink>
                                 </motion.div>
