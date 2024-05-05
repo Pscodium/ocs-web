@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { FaCheck } from "react-icons/fa";
 import { Label } from "@/components/ui/label";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { FaCopy } from "react-icons/fa6";
 
