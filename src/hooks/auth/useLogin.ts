@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { apiService, LoginProps } from "@/services/api";
 import { useMutation } from "react-query";
 

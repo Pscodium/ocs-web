@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable no-unused-vars */
 import React, { createContext, useContext, useState } from "react";
 
 interface LoginDialogContextProps {
