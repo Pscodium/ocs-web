@@ -5,6 +5,7 @@ const Tools = lazy(() => import('@/pages/home/subpages/tools'));
 const Settings = lazy(() => import('@/pages/home/subpages/settings'));
 const Markdown = lazy(() => import('@/pages/home/subpages/tools/subpages/markdown'));
 const UuidGenerator = lazy(() => import('@/pages/home/subpages/tools/subpages/uuid'));
+const DateTime = lazy(() => import('@/pages/home/subpages/tools/subpages/datetime'));
 
 const coreRoutes = [
     {
@@ -25,6 +26,14 @@ const coreRoutes = [
         component: UuidGenerator,
         id: uuid.v4(),
     },
+    {
+        path: '/tools/datetime',
+        title: 'Datetime generator',
+        component: DateTime,
+        id: uuid.v4(),
+    },
+
+
     {
         path: '/settings',
         title: 'Settings',

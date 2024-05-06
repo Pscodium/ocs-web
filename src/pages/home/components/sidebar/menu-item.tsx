@@ -60,6 +60,11 @@ export default function MenuItem({ item }: MenuItemAttributes) {
                                                     <Badge className='bg-core-secondary py-1 hover:bg-core-secondary' variant='default'>NEW</Badge>
                                                 </div>
                                             )}
+                                            {i.soon && (
+                                                <div>
+                                                    <Badge className='bg-core-secondary py-1 hover:bg-core-secondary' variant='default'>SOON</Badge>
+                                                </div>
+                                            )}
                                         </div>
                                     </NavLink>
                                 </motion.div>

@@ -5,6 +5,7 @@ import { SlSettings } from "react-icons/sl";
 import { IoChevronDown } from "react-icons/io5";
 import { FaCode } from "react-icons/fa6";
 import { AiOutlineFileMarkdown } from "react-icons/ai";
+import { MdCalendarMonth } from "react-icons/md";
 import React, { ReactElement } from "react";
 
 export interface SubMenuProps {
@@ -12,6 +13,7 @@ export interface SubMenuProps {
     path: string;
     beta?: boolean;
     new?: boolean;
+    soon?: boolean;
     description: string;
     icon: ReactElement<any, any>;
 }
@@ -40,18 +42,26 @@ export const SIDEBAR_ITEMS: SidebarItems[] = [
         chevron: <IoChevronDown size={20} />,
         submenuItems: [
             {
-                title: 'Markdown',
-                path: '/tools/markdown',
-                description: "Markdown editor",
-                icon: <AiOutlineFileMarkdown />
-            },
-            {
                 title: 'Uuid Generator',
                 new: true,
                 path: '/tools/uuid',
                 description: "Generates a random uuid v4",
                 icon: <FaCode />
-            }
+            },
+            {
+                title: 'Datetime',
+                path: '/tools/datetime',
+                description: "Datetime Generator",
+                new: true,
+                icon: <MdCalendarMonth />
+            },
+            {
+                title: 'Markdown',
+                path: '/tools/markdown',
+                description: "Markdown editor",
+                soon: true,
+                icon: <AiOutlineFileMarkdown />
+            },
         ]
     },
     {

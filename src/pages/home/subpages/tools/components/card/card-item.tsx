@@ -10,6 +10,7 @@ interface CardItem {
     icon: ReactElement<any, any>;
     new?: boolean;
     beta?: boolean;
+    soon?: boolean;
     path: string;
 }
 
@@ -35,6 +36,11 @@ export default function CardItem({ item }: CardItemProps) {
                     {item.new && (
                         <div>
                             <Badge className='bg-core-secondary py-1 hover:bg-core-secondary' variant='default'>NEW</Badge>
+                        </div>
+                    )}
+                    {item.soon && (
+                        <div>
+                            <Badge className='bg-core-secondary py-1 hover:bg-core-secondary' variant='default'>SOON</Badge>
                         </div>
                     )}
 
