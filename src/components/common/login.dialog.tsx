@@ -79,7 +79,7 @@ export default function LoginDialog() {
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpen}>
-            <DialogContent onKeyDown={handleKeyPress} className='bg-white outline-none border-none'>
+            <DialogContent onKeyDown={handleKeyPress} className='bg-white outline-none border-none z-[9999]'>
                 <DialogTitle className="text-[24px] text-black">Login</DialogTitle>
                 <DialogDescription className="text-[12px] text-black">
                     Realize seu login
