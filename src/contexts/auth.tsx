@@ -34,7 +34,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
                     variant: "destructive",
                     title: "Oh damn. An error has occurred",
                     description: "You tried to log in but something shit happened...",
-                    className: "outline-none border-none bg-red-600 text-slate-200",
+                    className: "outline-none border-none bg-red-600 text-white",
                 });
                 return false;
             }
@@ -47,7 +47,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
                 variant: "destructive",
                 title: "Hell yeah! You are inside me",
                 description: "You have successfully logged in you bastard fagot...",
-                className: "outline-none border-none bg-green-600 text-slate-200",
+                className: "outline-none border-none bg-green-600 text-white",
             });
 
             return true;
@@ -59,7 +59,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
                 variant: "destructive",
                 title: "Oh damn. An error has occurred",
                 description: "You tried to log in but something shit happened...",
-                className: "outline-none border-none bg-red-600 text-slate-200",
+                className: "outline-none border-none bg-red-600 text-white",
             });
 
             return false;
@@ -76,7 +76,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
                     variant: "destructive",
                     title: "Bye bye little bitch!!",
                     description: "You just logged out, now go to hell...",
-                    className: "outline-none border-none bg-green-600 text-slate-200",
+                    className: "outline-none border-none bg-green-600 text-white",
                 });
                 return;
             }
@@ -85,7 +85,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
                 variant: "destructive",
                 title: "Oh damn. An error has occurred",
                 description: "You tried to log out but something shit happened...",
-                className: "outline-none border-none bg-red-600 text-slate-200",
+                className: "outline-none border-none bg-red-600 text-white",
             });
             return false;
         }

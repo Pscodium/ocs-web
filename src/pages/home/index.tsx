@@ -1,19 +1,34 @@
 import { Outlet } from 'react-router-dom';
-import Sidebar from './components/sidebar';
 import { Toaster } from '@/components/ui/toaster';
 import LoginDialog from '@/components/common/login.dialog';
+import { useEffect, useState } from 'react';
+import { Sidebar } from '@/components/common/sidebar';
 
 export default function Home() {
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     return (
-        <div className='bg-forum-bg flex flex-row h-full w-full justify-between'>
-            <Sidebar className='fixed w-[300px] min-h-screen bg-white border-r-[1px] border-r-slate-200 top-0 flex px-5 gap-5 z-50' />
-            <div className='w-[300px]' />
-            <main className='bg-white overflow-y-auto w-[calc(100%-300px)] min-h-screen'>
-                <Outlet />
-            </main>
+        <>
+            <div className='bg-forum-bg flex flex-row h-full w-full justify-between'>
+                {windowWidth < 1280 ? <Sidebar.DrawerSidebar /> : <Sidebar.Default />}
+                <main className='bg-white overflow-y-auto w-full min-h-screen'>
+                    <Outlet />
+                </main>
+                <Toaster />
+            </div>
             <LoginDialog />
-            <Toaster />
-        </div>
+        </>
     );
 }
