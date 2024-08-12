@@ -6,6 +6,8 @@ import { FaArrowLeft, FaPen, FaPlus, FaTrashCan } from "react-icons/fa6";
 import ArticlePost from "./components/post";
 import PostCreator from "./components/editor";
 import { useAuth } from "@/contexts/auth";
+import Loader from "@/components/ui/loader";
+import { ThreeDots } from "react-loader-spinner";
 
 export interface ArticlesProps {}
 
@@ -17,6 +19,7 @@ export default function Articles() {
     const [articles, setArticles] = useState<IArticleResponse>([]);
     const [article, setArticle] = useState<IArticle>();
     const [folder, setFolder] = useState<ITag>();
+    const [loading, setLoading] = useState(false);
     const [articleTitle, setArticleTitle] = useState('');
     const [folderTitle, setFolderTitle] = useState('');
     const { user } = useAuth();
@@ -38,10 +41,12 @@ export default function Articles() {
     }
 
     async function getArticles(tagId: string) {
+        setLoading(true);
         try {
             const data = await apiService.getArticlesByTagId(tagId)
 
             setArticles(data);
+            setLoading(false);
         } catch (err) {
             console.error(err);
         }
@@ -76,6 +81,7 @@ export default function Articles() {
         setFolderTitle(tag.title);
 
         setFolder(tag);
+        setArticles([]);
         getArticles(tag.id);
     }
 
@@ -208,6 +214,19 @@ export default function Articles() {
                             )}
                             {step === 'FILES' && (
                                 <>
+                                    {loading && (
+                                        <div className="w-full h-10 flex items-center justify-center">
+                                            <ThreeDots
+                                                height="80"
+                                                width="80"
+                                                radius="9"
+                                                color="#000"
+                                                ariaLabel="three-dots-loading"
+                                                wrapperStyle={{}}
+                                                visible={true}
+                                            />
+                                        </div>
+                                    )}
                                     {articles && (
                                         <Folders.Root className="flex flex-wrap gap-3">
                                             {articles.map((article, index) => (
