@@ -36,6 +36,10 @@ interface ArticleProps {
     }[]
 }
 
+interface ArticleEditProps extends ArticleProps {
+    articleId: string
+}
+
 class ApiService {
     public api: AxiosInstance;
 
@@ -152,6 +156,46 @@ class ApiService {
             tags
         }, {
             headers: this.getHeaders(),
+        })
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get logout');
+        }
+
+        return res.data;
+    }
+
+    async updateArticle({ body, tags, title, articleId } : ArticleEditProps) {
+        const res = await this.api.put(`/article/update/${articleId}`, {
+            body,
+            title,
+            tags
+        }, {
+            headers: this.getHeaders(),
+        })
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get logout');
+        }
+
+        return res.data;
+    }
+
+    async deleteArticle(articleId: string | undefined) {
+        const res = await this.api.delete(`/article/delete/${articleId}`, {
+            headers: this.getHeaders()
+        })
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get logout');
+        }
+
+        return res.data;
+    }
+
+    async deleteFolder(folderId: string | undefined) {
+        const res = await this.api.delete(`/tag/delete/${folderId}`, {
+            headers: this.getHeaders()
         })
 
         if (res.status != 200) {

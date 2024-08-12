@@ -33,7 +33,7 @@ export function DrawerSidebar() {
                         <Input icon={<MagnifyingGlassIcon className='h-5 w-5' />} label='Search' onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} crossOrigin={undefined} />
                     </div>
                     <List placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                        {SIDEBAR_ITEMS.map((item) => {
+                        {SIDEBAR_ITEMS.map((item, index) => {
                             return (
                                 <>
                                     {item.submenu && item.submenuItems?.length ? (
@@ -43,6 +43,7 @@ export function DrawerSidebar() {
                                             placeholder={undefined}
                                             onPointerEnterCapture={undefined}
                                             onPointerLeaveCapture={undefined}
+                                            key={index}
                                         >
                                             <NavLink to={item.path}>
                                                 <ListItem className='p-0' selected={open === 1} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
@@ -70,8 +71,8 @@ export function DrawerSidebar() {
                                             </NavLink>
                                             <AccordionBody className='py-1'>
                                                 <List className='p-0' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                                                    {item.submenuItems.map((subItem) => (
-                                                        <NavLink to={subItem.path}>
+                                                    {item.submenuItems.map((subItem, subIndex) => (
+                                                        <NavLink to={subItem.path} key={subIndex}>
                                                             <ListItem placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                                                                 <ListItemPrefix placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                                                                     <ChevronRightIcon strokeWidth={3} className='h-3 w-5' />
@@ -102,7 +103,7 @@ export function DrawerSidebar() {
                                         </Accordion>
                                     ) : (
                                         <>
-                                            <NavLink to={item.path}>
+                                            <NavLink to={item.path} key={index}>
                                                 <ListItem placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                                                     <ListItemPrefix placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                                                         {item.icon}
