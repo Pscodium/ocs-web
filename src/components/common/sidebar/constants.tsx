@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IoChevronDown } from "react-icons/io5";
 import React, { ReactElement } from "react";
-import { CodeBracketSquareIcon, CalendarIcon, BookmarkIcon, AdjustmentsHorizontalIcon, WrenchScrewdriverIcon, InboxIcon } from '@heroicons/react/24/solid';
+import { CodeBracketSquareIcon, CalendarIcon, BookmarkIcon, AdjustmentsHorizontalIcon, WrenchScrewdriverIcon, InboxIcon, DocumentTextIcon } from '@heroicons/react/24/solid';
 
 export interface SubMenuProps {
     title: string;
@@ -58,6 +58,12 @@ export const SIDEBAR_ITEMS: SidebarItems[] = [
                 icon: <BookmarkIcon className="h-5 w-5" />
             },
         ]
+    },
+    {
+        title: 'Articles',
+        path: '/articles',
+        separated: true,
+        icon: <DocumentTextIcon className="h-5 w-5" />
     },
     {
         title: 'Settings',

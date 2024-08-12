@@ -5,7 +5,7 @@ import { SlSettings } from "react-icons/sl";
 import { IoChevronDown } from "react-icons/io5";
 import { FaCode } from "react-icons/fa6";
 import { AiOutlineFileMarkdown } from "react-icons/ai";
-import { MdCalendarMonth } from "react-icons/md";
+import { MdCalendarMonth, MdOutlineArticle } from "react-icons/md";
 import React, { ReactElement } from "react";
 
 export interface SubMenuProps {
@@ -63,6 +63,11 @@ export const SIDEBAR_ITEMS: SidebarItems[] = [
                 icon: <AiOutlineFileMarkdown />
             },
         ]
+    },
+    {
+        title: 'Articles',
+        path: '/articles',
+        icon: <MdOutlineArticle size={20} />
     },
     {
         title: 'Settings',

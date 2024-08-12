@@ -28,6 +28,14 @@ interface LoginProps {
     password: string;
 }
 
+interface ArticleProps {
+    title: string;
+    body: string;
+    tags: {
+        title: string
+    }[]
+}
+
 class ApiService {
     public api: AxiosInstance;
 
@@ -115,6 +123,42 @@ class ApiService {
         }
 
         return res.data.success;
+    }
+
+    async getTags(): Promise<ITagResponse> {
+        const res = await this.api.get('/list-all/tags');
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get logout');
+        }
+
+        return res.data;
+    }
+
+    async getArticlesByTagId(tagId: string): Promise<IArticleResponse> {
+        const res = await this.api.get('/list/articles/' + tagId);
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get logout');
+        }
+
+        return res.data;
+    }
+
+    async createArticle({ body, tags, title } : ArticleProps) {
+        const res = await this.api.post('/article/create', {
+            body,
+            title,
+            tags
+        }, {
+            headers: this.getHeaders(),
+        })
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get logout');
+        }
+
+        return res.data;
     }
 }
 

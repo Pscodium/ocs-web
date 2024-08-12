@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import * as uuid from 'uuid';
 
 const Tools = lazy(() => import('@/pages/home/subpages/tools'));
+const Articles = lazy(() => import('@/pages/home/subpages/articles'));
 const Settings = lazy(() => import('@/pages/home/subpages/settings'));
 const Markdown = lazy(() => import('@/pages/home/subpages/tools/subpages/markdown'));
 const UuidGenerator = lazy(() => import('@/pages/home/subpages/tools/subpages/uuid'));
@@ -32,8 +33,12 @@ const coreRoutes = [
         component: DateTime,
         id: uuid.v4(),
     },
-
-
+    {
+        path: '/articles',
+        title: 'Articles',
+        component: Articles,
+        id: uuid.v4()
+    },
     {
         path: '/settings',
         title: 'Settings',
