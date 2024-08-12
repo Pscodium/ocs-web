@@ -192,8 +192,8 @@ export default function Articles() {
                                 <>
                                     {tags && (
                                         <Folders.Root className="flex flex-wrap gap-3">
-                                            {tags.map(tag => (
-                                                <Folders.Body onClick={() => handleOpenFolder(tag)} className="p-5 hover:bg-blue-gray-50 w-28 rounded-md text-center relative cursor-pointer">
+                                            {tags.map((tag, index) => (
+                                                <Folders.Body key={index} onClick={() => handleOpenFolder(tag)} className="p-5 hover:bg-blue-gray-50 w-28 rounded-md text-center relative cursor-pointer">
                                                     <Folders.Icon hex={tag.hex} />
                                                     <Folders.Badge>{tag.articlesCount}</Folders.Badge>
                                                     <Folders.Title>{tag.title}</Folders.Title>
@@ -210,8 +210,8 @@ export default function Articles() {
                                 <>
                                     {articles && (
                                         <Folders.Root className="flex flex-wrap gap-3">
-                                            {articles.map(article => (
-                                                <Folders.Body onClick={() => handleOpenArticle(article)} className="p-5 hover:bg-blue-gray-50 w-28 rounded-md text-center relative cursor-pointer">
+                                            {articles.map((article, index) => (
+                                                <Folders.Body key={index} onClick={() => handleOpenArticle(article)} className="p-5 hover:bg-blue-gray-50 w-28 rounded-md text-center relative cursor-pointer">
                                                     <Folders.Files />
                                                     <Folders.Title>{article.title}</Folders.Title>
                                                 </Folders.Body>
