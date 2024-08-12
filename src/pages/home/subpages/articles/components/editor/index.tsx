@@ -53,7 +53,6 @@ export default function PostCreator({ tags, handleSubmitArticle, selectedTag, ed
     }, [selectedTag])
 
     useEffect(() => {
-        console.log(`aqui `, article, edit)
         if (edit && article) {
             setValue(article.body);
             setTitle(article.title);

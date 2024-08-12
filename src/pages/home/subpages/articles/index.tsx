@@ -222,10 +222,17 @@ export default function Articles() {
                             )}
                         </Desktop.WindowContent>
                     )}
-                    {step === 'CREATE' || step === 'EDIT' && (
+                    {step === 'CREATE' && (
                         <>
                             <div>
-                                <PostCreator edit={step === 'EDIT'} article={article} selectedTag={folder} tags={tags} handleSubmitArticle={handleSubmitArticle} />
+                                <PostCreator edit={false} article={undefined} selectedTag={folder} tags={tags} handleSubmitArticle={handleSubmitArticle} />
+                            </div>
+                        </>
+                    )}
+                    {step === 'EDIT' && (
+                        <>
+                            <div>
+                                <PostCreator edit={true} article={article} selectedTag={undefined} tags={tags} handleSubmitArticle={handleSubmitArticle} />
                             </div>
                         </>
                     )}
