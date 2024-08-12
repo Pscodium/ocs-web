@@ -255,11 +255,11 @@
   }
   .w-md-editor {
     text-align: left;
-    border-radius: 5px;
+    border-radius: 0;
     padding-bottom: 1px;
     position: relative;
     color: var(--color-fg-default);
-    box-shadow: 0 0 0 1px var(--color-border-default), 0 0 0 var(--color-border-default), 0 1px 1px var(--color-border-default);
+    box-shadow: 0 0 0 0;
     background-color: var(--color-canvas-default);
     font-family: var(--ff-monospace);
     font-size: 20px;
