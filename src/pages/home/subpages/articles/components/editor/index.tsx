@@ -16,6 +16,9 @@ const codePreview: ICommand = {
 
 interface PostCreatorProps {
     tags: ITagResponse;
+    selectedTag: ITag | undefined;
+    edit: boolean;
+    article: IArticle | undefined;
     handleSubmitArticle: () => void;
 }
 
@@ -25,7 +28,7 @@ export interface Tag {
     [key: string]: string;
 }
 
-export default function PostCreator({ tags, handleSubmitArticle }: PostCreatorProps) {
+export default function PostCreator({ tags, handleSubmitArticle, selectedTag, edit, article }: PostCreatorProps) {
     const [value, setValue] = React.useState<string | undefined>("");
     const [viewHeight, setViewHeight] = React.useState(0);
     const [title, setTitle] = React.useState('');
@@ -38,6 +41,35 @@ export default function PostCreator({ tags, handleSubmitArticle }: PostCreatorPr
             className: ''
         };
     })
+
+    useEffect(() => {
+        if (selectedTag) {
+            setTagList([{
+                text: selectedTag?.title,
+                id: selectedTag?.id,
+                className: ''
+            }]);
+        }
+    }, [selectedTag])
+
+    useEffect(() => {
+        console.log(`aqui `, article, edit)
+        if (edit && article) {
+            setValue(article.body);
+            setTitle(article.title);
+            
+            if (article.Tags) {
+                const newTagList = article.Tags?.map((tag) => {
+                    return {
+                        text: tag?.title,
+                        id: tag?.id,
+                        className: ''
+                    }
+                });
+                setTagList(newTagList)
+            }
+        }
+    }, [edit, article])
 
     useEffect(() => {
         setViewHeight(window.innerHeight - 120);
@@ -86,6 +118,19 @@ export default function PostCreator({ tags, handleSubmitArticle }: PostCreatorPr
 
     async function createArticle() {
         try {
+            if (edit && article) {
+                await apiService.updateArticle({
+                    body: String(value),
+                    tags: tagList.map(tag => {
+                        return {title: tag.text };
+                    }),
+                    title: title,
+                    articleId: article.id
+                });
+    
+                handleSubmitArticle();
+                return;
+            }
             await apiService.createArticle({
                 body: String(value),
                 tags: tagList.map(tag => {

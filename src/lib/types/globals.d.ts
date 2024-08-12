@@ -6,6 +6,7 @@ interface IArticle {
     files?: object | null;
     createdAt: Date;
     updatedAt: Date;
+    Tags?: ITagResponse
 }
 
 interface ITag {
