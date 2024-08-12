@@ -4,6 +4,10 @@ export interface TitleProps {
 
 export default function Title({ children }: TitleProps) {
     return (
-        <div className='select-none font-semibold'>{ children }</div>
+        <div className="flex text-center justify-center">
+            <p className="select-none font-semibold justify-center">
+                { children }
+            </p>
+        </div>
     );
 }
