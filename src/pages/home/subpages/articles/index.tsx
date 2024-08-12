@@ -6,7 +6,6 @@ import { FaArrowLeft, FaPen, FaPlus, FaTrashCan } from "react-icons/fa6";
 import ArticlePost from "./components/post";
 import PostCreator from "./components/editor";
 import { useAuth } from "@/contexts/auth";
-import Loader from "@/components/ui/loader";
 import { ThreeDots } from "react-loader-spinner";
 
 export interface ArticlesProps {}
