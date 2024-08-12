@@ -82,7 +82,16 @@ export default function Articles() {
         <div className="flex w-full min-h-screen justify-center items-center">
             <Desktop.Root>
                 <Desktop.Window>
-                    {step === 'FOLDERS' && (<Desktop.WindowHeader>Folders</Desktop.WindowHeader>)}
+                    {step === 'FOLDERS' && (
+                        <>
+                            {user && user?.role === 'owner' && (
+                                <div onClick={handleOpenPostCreator} className="absolute inset-y-[25px] ml-1 cursor-pointer">
+                                    <FaPlus />
+                                </div>
+                            )}
+                            <Desktop.WindowHeader>Folders</Desktop.WindowHeader>
+                        </>
+                    )}
                     {step === 'FILES' && (
                         <>
                             <div onClick={returnToFolders} className="absolute inset-y-[25px] ml-2 cursor-pointer">
@@ -101,9 +110,11 @@ export default function Articles() {
                             <div onClick={returnToFiles} className="absolute inset-y-[25px] ml-2 cursor-pointer">
                                 <FaArrowLeft />
                             </div>
-                            <div onClick={handleOpenPostCreator} className="absolute inset-y-[25px] ml-10 cursor-pointer">
-                                <FaPlus />
-                            </div>
+                            {user && user?.role === 'owner' && (
+                                <div onClick={handleOpenPostCreator} className="absolute inset-y-[25px] ml-10 cursor-pointer">
+                                    <FaPlus />
+                                </div>
+                            )}
                             <Desktop.WindowHeader>{articleTitle}</Desktop.WindowHeader>
                         </>
                     )}
