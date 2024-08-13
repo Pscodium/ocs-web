@@ -7,6 +7,7 @@ import ArticlePost from "./components/post";
 import PostCreator from "./components/editor";
 import { useAuth } from "@/contexts/auth";
 import { ThreeDots } from "react-loader-spinner";
+import { Dialog } from "./components/dialog";
 
 export interface ArticlesProps {}
 
@@ -21,6 +22,8 @@ export default function Articles() {
     const [loading, setLoading] = useState(false);
     const [articleTitle, setArticleTitle] = useState('');
     const [folderTitle, setFolderTitle] = useState('');
+    const [openFileDeleteDialog, setOpenFileDeleteDialog] = useState(false);
+    const [openFolderDeleteDialog, setOpenFolderDeleteDialog] = useState(false);
     const { user } = useAuth();
 
     useEffect(() => {
@@ -58,6 +61,7 @@ export default function Articles() {
             setArticles((prevArticle) => prevArticle.filter(article => article.id !== articleId));
             setStep('FILES');
             getTags();
+            setOpenFileDeleteDialog(false);
         } catch (e) {
             console.error(e);
         }
@@ -70,6 +74,7 @@ export default function Articles() {
             setStep('FOLDERS');
             setFolder(undefined);
             getTags();
+            setOpenFolderDeleteDialog(false);
         } catch (e) {
             console.error(e);
         }
@@ -139,7 +144,7 @@ export default function Articles() {
                                     <div onClick={handleOpenPostCreator} className="absolute inset-y-[25px] ml-10 cursor-pointer">
                                         <FaPlus />
                                     </div>
-                                    <div onClick={() => handleDeleteFolder(folder?.id)} className="absolute inset-y-[25px] ml-[70px] cursor-pointer">
+                                    <div onClick={() => setOpenFolderDeleteDialog(!openFolderDeleteDialog)} className="absolute inset-y-[25px] ml-[70px] cursor-pointer">
                                         <FaTrashCan color="#FF3366" />
                                     </div>
                                 </>
@@ -157,7 +162,7 @@ export default function Articles() {
                                     <div onClick={handleOpenPostCreator} className="absolute inset-y-[25px] ml-10 cursor-pointer">
                                         <FaPlus />
                                     </div>
-                                    <div onClick={() => handleDeleteArticle(article?.id)} className="absolute inset-y-[25px] ml-[70px] cursor-pointer">
+                                    <div onClick={() => setOpenFileDeleteDialog(!openFileDeleteDialog)} className="absolute inset-y-[25px] ml-[70px] cursor-pointer">
                                         <FaTrashCan color="#FF3366" />
                                     </div>
                                     <div onClick={handleEditArticle} className="absolute inset-y-[25px] ml-[100px] cursor-pointer">
@@ -256,6 +261,8 @@ export default function Articles() {
                     )}
                 </Desktop.Window>
             </Desktop.Root>
+            <Dialog.FileDelete isOpen={openFileDeleteDialog} setOpen={setOpenFileDeleteDialog} onClickSubmit={() => handleDeleteArticle(article?.id)}  article={article} />
+            <Dialog.FolderDelete isOpen={openFolderDeleteDialog} setOpen={setOpenFolderDeleteDialog} onClickSubmit={() => handleDeleteFolder(folder?.id)} folder={folder} />
         </div>
     );
 }
