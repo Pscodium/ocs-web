@@ -5,9 +5,11 @@ import { SIDEBAR_ITEMS } from './constants';
 import { NavLink } from 'react-router-dom';
 import logo from '@/assets/k2ehu39u8e8lvejynnk.png';
 import SidebarLogin from './login';
+import { useAuth } from '@/contexts/auth';
 
 export function Default() {
     const [open, setOpen] = React.useState(0);
+    const { user } = useAuth();
 
     const handleOpen = (value: React.SetStateAction<number>) => {
         setOpen(open === value ? 0 : value);
@@ -88,7 +90,7 @@ export function Default() {
                                 </Accordion>
                             ) : (
                                 <>
-                                    <NavLink to={item.path} key={index}>
+                                    <NavLink className={item.admin? user?.role != 'owner'? 'hidden':'visible': 'visible'} to={item.path} key={index}>
                                         <ListItem placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                                             <ListItemPrefix placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                                                 {item.icon}
