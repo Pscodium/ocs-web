@@ -20,6 +20,15 @@ interface ITag {
     updatedAt: Date;
 }
 
+interface IImage {
+    id: string;
+    name: string;
+    url: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+type IImageReponse = IImage[];
 type ITagResponse = ITag[];
 type IArticleResponse = IArticle[];
 

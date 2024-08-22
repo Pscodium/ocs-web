@@ -204,6 +204,43 @@ class ApiService {
 
         return res.data;
     }
+
+    async getImages(): Promise<IImageReponse> {
+        const res = await this.api.get(`/images`)
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get images');
+        }
+
+        return res.data;
+    }
+
+    async uploadImage(file: File): Promise<IImage> {
+        const formData = new FormData();
+        formData.append('media', file);
+
+        const res = await this.api.post('/image/upload', formData, {
+            headers: this.getHeaders()
+        });
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get a user profile.');
+        }
+
+        return res.data;
+    }
+
+    async deleteImage(id: string): Promise<IImage> {
+        const res = await this.api.delete(`/image/delete/${id}`, {
+            headers: this.getHeaders()
+        });
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get a user profile.');
+        }
+
+        return res.data;
+    }
 }
 
 export const apiService = new ApiService();
