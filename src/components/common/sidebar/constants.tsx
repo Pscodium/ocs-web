@@ -67,8 +67,8 @@ export const SIDEBAR_ITEMS: SidebarItems[] = [
         icon: <DocumentTextIcon className="h-5 w-5" />
     },
     {
-        title: 'Image Storage',
-        path: '/images',
+        title: 'Storage',
+        path: '/storage',
         admin: true,
         separated: true,
         icon: <PhotoIcon className="h-5 w-5" />

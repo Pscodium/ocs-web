@@ -205,38 +205,75 @@ class ApiService {
         return res.data;
     }
 
-    async getImages(): Promise<IImageReponse> {
-        const res = await this.api.get(`/images`)
+    async getFiles(): Promise<IFileResponse> {
+        const res = await this.api.get(`/storage`)
 
         if (res.status != 200) {
-            throw new Error('Unexpected error on get images');
+            throw new Error('Unexpected error on get files');
         }
 
         return res.data;
     }
 
-    async uploadImage(file: File): Promise<IImage> {
+    async uploadFile(file: File, folderId: string): Promise<IFile> {
         const formData = new FormData();
         formData.append('media', file);
 
-        const res = await this.api.post('/image/upload', formData, {
+        const res = await this.api.post(`/storage/upload/${folderId}`, formData, {
             headers: this.getHeaders()
         });
 
         if (res.status != 200) {
-            throw new Error('Unexpected error on get a user profile.');
+            throw new Error('Unexpected error on create file');
         }
 
         return res.data;
     }
 
-    async deleteImage(id: string): Promise<IImage> {
-        const res = await this.api.delete(`/image/delete/${id}`, {
+    async deleteFile(id: string, folderId: string): Promise<IFile> {
+        const res = await this.api.delete(`/storage/delete/${id}/folder/${folderId}`, {
             headers: this.getHeaders()
         });
 
         if (res.status != 200) {
-            throw new Error('Unexpected error on get a user profile.');
+            throw new Error('Unexpected error on delete file');
+        }
+
+        return res.data;
+    }
+
+    async getFolders(): Promise<IFolderResponse> {
+        const res = await this.api.get(`/storage/folders`)
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get files');
+        }
+
+        return res.data;
+    }
+
+    async createFolder({ folderName, type }: { folderName: string, type?: FileTypes }) {
+        const res = await this.api.post('/storage/folders/create', {
+            folderName,
+            type
+        }, {
+            headers: this.getHeaders(),
+        })
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on get files');
+        }
+
+        return res.data;
+    }
+
+    async deleteStorageFolder(id: string) {
+        const res = await this.api.delete(`/storage/folders/delete/${id}`, {
+            headers: this.getHeaders()
+        })
+
+        if (res.status != 200) {
+            throw new Error('Unexpected error on delete folder');
         }
 
         return res.data;

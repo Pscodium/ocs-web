@@ -20,15 +20,32 @@ interface ITag {
     updatedAt: Date;
 }
 
-interface IImage {
+interface IFile {
     id: string;
     name: string;
+    type?: string;
+    private?: boolean;
     url: string;
     createdAt: Date;
     updatedAt: Date;
 }
 
-type IImageReponse = IImage[];
+
+interface IFolder {
+    id: string;
+    name: string;
+    type?: FileTypes;
+    hex: string;
+    filesCount: number;
+    private?: boolean;
+    Files?: IFileResponse;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+type IFolderResponse = IFolder[];
+type IFileResponse = IFile[];
 type ITagResponse = ITag[];
 type IArticleResponse = IArticle[];
 
+type FileTypes = "image/*" | "audio/*" | "video/*" | "webm/*";
