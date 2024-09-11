@@ -124,7 +124,9 @@ export default function Storage() {
                 className: "outline-none border-none bg-green-600 text-white",
             });
             setOpenContentDialog(false);
-            getFiles();
+            setStep('FOLDERS');
+            setFolder(undefined);
+            getFolders();
         } catch (err) {
             toast({
                 variant: "destructive",
