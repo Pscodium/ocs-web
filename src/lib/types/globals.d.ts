@@ -48,4 +48,4 @@ type IFileResponse = IFile[];
 type ITagResponse = ITag[];
 type IArticleResponse = IArticle[];
 
-type FileTypes = "image/*" | "audio/*" | "video/*" | "webm/*";
+type FileTypes = "image/*" | "audio/*" | "video/*";

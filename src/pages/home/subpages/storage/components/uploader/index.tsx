@@ -3,6 +3,8 @@ import { RiCameraSwitchFill } from 'react-icons/ri';
 import { FaUpload } from 'react-icons/fa';
 import Image from '../image';
 import { FaTrashCan } from 'react-icons/fa6';
+import { VideoPreview } from '../player/videoPreview';
+import AudioPlayer from '../player/audio';
 
 export interface UploaderProps extends React.ComponentProps<'div'> {
     setFile:  React.Dispatch<React.SetStateAction<File | undefined>>;
@@ -28,7 +30,7 @@ export default function Uploader({ setFile, setFileUrl, fileUrl, mimetype, handl
 
     return (
         <div {...props}>
-            <button onClick={handleClickFileUpload} className='hover:bg-blue-gray-50 rounded-md h-[180px] w-[180px] hover:opacity-70 animate-fade-down'>
+            <button onClick={handleClickFileUpload} className='hover:bg-blue-gray-50 rounded-md p-2 hover:opacity-70 animate-fade-down items-center justify-center flex'>
                 <input
                     type='file'
                     accept={mimetype}
@@ -41,7 +43,24 @@ export default function Uploader({ setFile, setFileUrl, fileUrl, mimetype, handl
                         <FaUpload className='w-[30px] h-[30px] fill-black' />
                     </div>
                 )}
-                {fileUrl ? <Image source={fileUrl} className='h-[180px] w-[180px] rounded-lg object-cover bg-forum-seachbar' /> : <div className='h-[180px] w-[180px] rounded-lg object-cover bg-forum-seachbar' />}
+                {fileUrl ? 
+                    <div>
+                        {mimetype && mimetype == 'video/*' && (
+                            <VideoPreview url={fileUrl} className='h-[180px] w-[180px] rounded-lg object-cover' />
+                        )}
+                        {mimetype && mimetype == 'audio/*' && (
+                            <AudioPlayer url={fileUrl} className='h-[180px] w-[350px] rounded-lg object-cover' />
+                        )}
+                        {mimetype && mimetype == 'image/*' && (
+                            <Image source={fileUrl} className='h-[180px] w-[180px] rounded-lg object-cover' />
+                        )}
+                        {!mimetype && (
+                            <Image source={fileUrl} className='h-[180px] w-[180px] rounded-lg object-cover' />
+                        )}
+                    </div>
+                    : 
+                    <div className='h-[180px] w-[180px] rounded-lg object-cover' />
+                }
                 
             </button>
             {fileUrl && (

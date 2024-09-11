@@ -7,16 +7,19 @@ import {
 } from '@/components/ui/dialog';
 import { FaSquareCheck, FaCheck, FaCopy, FaTrashCan } from 'react-icons/fa6';
 import { useAuth } from '@/contexts/auth';
+import AudioPlayer from '../player/audio';
+import VideoPlayer from '../player/video';
 
 
 export interface ContentDialogProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
     isOpen: boolean;
     file: IFile | undefined;
+    folder: IFolder | undefined;
     deleteFile: () => void;
 }
 
-export default function ContentDialog({ isOpen, setOpen, file, deleteFile }: ContentDialogProps) {
+export default function ContentDialog({ isOpen, setOpen, file, folder, deleteFile }: ContentDialogProps) {
     const [successCopy, setSuccessCopy] = useState(false);
     const { user } = useAuth();
     const [confirming, setConfirming] = useState(false);
@@ -63,8 +66,19 @@ export default function ContentDialog({ isOpen, setOpen, file, deleteFile }: Con
             <DialogContent className='bg-white outline-none border-none z-[9999] flex flex-col overflow-y-auto max-h-screen'>
                 <DialogTitle className="text-[24px] text-black">File</DialogTitle>
                 <DialogDescription>{file?.name}</DialogDescription>
-                <div className='flex w-full' >
-                    <img src={file?.url} className='w-full' />
+                <div className='flex w-full'>
+                    {folder && file && folder.type === 'video/*' && (
+                        <VideoPlayer url={file.url} />
+                    )}
+                    {folder && file && folder.type === 'image/*' && (
+                        <img src={file.url} className='w-full' />
+                    )}
+                    {folder && file && folder.type === 'audio/*' && (
+                        <AudioPlayer url={file.url} className='w-full' />
+                    )}
+                    {folder && file && !folder.type && (
+                        <img src={file.url} className='w-full' />
+                    )}
                 </div>
                 <div className='w-full flex justify-between'>
                     <div onClick={copyToClipboard} className='cursor-pointer'>

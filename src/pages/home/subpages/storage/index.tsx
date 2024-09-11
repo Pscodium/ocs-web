@@ -20,8 +20,7 @@ export type WindowSteps = "FOLDERS" | "FILES";
 enum Mimetypes {
     Video = "video/*",
     Audio = "audio/*",
-    Image = "image/*",
-    Webm =  "webm/*"
+    Image = "image/*"
 }
 
 export default function Storage() {
@@ -241,7 +240,6 @@ export default function Storage() {
                                                     <SelectItem value={Mimetypes.Video}>Video</SelectItem>
                                                     <SelectItem value={Mimetypes.Audio}>Audio</SelectItem>
                                                     <SelectItem value={Mimetypes.Image}>Image</SelectItem>
-                                                    <SelectItem value={Mimetypes.Webm}>Webm</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </PopoverContent>
@@ -292,8 +290,10 @@ export default function Storage() {
                                 <Files.Root className="flex flex-wrap gap-3">
                                     {files && files.map((object, index) => (
                                         <Files.Body onClick={() => openFileDialog(object)} hover={object.name} key={index} className="p-5 hover:bg-blue-gray-50 w-32 rounded-md text-center relative cursor-pointer">
-                                            <Files.Icon url={object.url} />
-                                            <Files.Title>{object.name}</Files.Title>
+                                            <Files.Icon url={object.url} type={folder?.type} />
+                                            {folder?.type && folder.type !== 'video/*' && (
+                                                <Files.Title>{object.name}</Files.Title>
+                                            )}
                                         </Files.Body>
                                     ))}
                                 </Files.Root>
@@ -310,6 +310,7 @@ export default function Storage() {
             />
             <ContentDialog 
                 file={file}
+                folder={folder}
                 isOpen={openContentDialog}
                 setOpen={setOpenContentDialog}
                 deleteFile={deleteFile}
