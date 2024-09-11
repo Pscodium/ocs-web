@@ -12,11 +12,11 @@ import { useAuth } from '@/contexts/auth';
 export interface ContentDialogProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
     isOpen: boolean;
-    image: IImage | undefined;
-    deleteImage: () => void;
+    file: IFile | undefined;
+    deleteFile: () => void;
 }
 
-export default function ContentDialog({ isOpen, setOpen, image, deleteImage }: ContentDialogProps) {
+export default function ContentDialog({ isOpen, setOpen, file, deleteFile }: ContentDialogProps) {
     const [successCopy, setSuccessCopy] = useState(false);
     const { user } = useAuth();
     const [confirming, setConfirming] = useState(false);
@@ -36,7 +36,7 @@ export default function ContentDialog({ isOpen, setOpen, image, deleteImage }: C
 
     const handleDeleteClick = () => {
         if (confirming) {
-            deleteImage();
+            deleteFile();
             setConfirming(false);
             clearTimeout(timer? timer : undefined);
             setTimer(null);
@@ -47,8 +47,8 @@ export default function ContentDialog({ isOpen, setOpen, image, deleteImage }: C
     };
 
     function copyToClipboard() {
-        if (!image?.url) return;
-        navigator.clipboard.writeText(image.url);
+        if (!file?.url) return;
+        navigator.clipboard.writeText(file.url);
         setSuccessCopy(true);
 
 
@@ -61,10 +61,10 @@ export default function ContentDialog({ isOpen, setOpen, image, deleteImage }: C
     return (
         <Dialog open={isOpen} onOpenChange={setOpen}>
             <DialogContent className='bg-white outline-none border-none z-[9999] flex flex-col overflow-y-auto max-h-screen'>
-                <DialogTitle className="text-[24px] text-black">Image</DialogTitle>
-                <DialogDescription>{image?.name}</DialogDescription>
+                <DialogTitle className="text-[24px] text-black">File</DialogTitle>
+                <DialogDescription>{file?.name}</DialogDescription>
                 <div className='flex w-full' >
-                    <img src={image?.url} className='w-full' />
+                    <img src={file?.url} className='w-full' />
                 </div>
                 <div className='w-full flex justify-between'>
                     <div onClick={copyToClipboard} className='cursor-pointer'>

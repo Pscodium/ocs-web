@@ -4,7 +4,7 @@ import * as uuid from 'uuid';
 const Tools = lazy(() => import('@/pages/home/subpages/tools'));
 const Articles = lazy(() => import('@/pages/home/subpages/articles'));
 const Settings = lazy(() => import('@/pages/home/subpages/settings'));
-const Images = lazy(() => import('@/pages/home/subpages/images'));
+const Storage = lazy(() => import('@/pages/home/subpages/storage'));
 const Markdown = lazy(() => import('@/pages/home/subpages/tools/subpages/markdown'));
 const UuidGenerator = lazy(() => import('@/pages/home/subpages/tools/subpages/uuid'));
 const DateTime = lazy(() => import('@/pages/home/subpages/tools/subpages/datetime'));
@@ -35,9 +35,9 @@ const coreRoutes = [
         id: uuid.v4(),
     },
     {
-        path: '/images',
-        title: 'Images Storage',
-        component: Images,
+        path: '/storage',
+        title: 'Storage',
+        component: Storage,
         id: uuid.v4()
     },
     {
