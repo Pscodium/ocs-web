@@ -5,7 +5,6 @@ import path from 'path';
 
 dotenv.config();
 
-// https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
     resolve: {
@@ -14,7 +13,15 @@ export default defineConfig({
         },
     },
     server: {
-        port: Number(process.env.PORT)
+        port: Number(process.env.PORT) || 2304,
+        host: process.env.HOST || 'localhost',
+        fs: {
+            allow: ['.'],
+        },
     },
-    assetsInclude: ['**/*.md']
+    assetsInclude: ['**/*.md'],
+    build: {
+        outDir: 'dist',
+        emptyOutDir: true,
+    },
 });
