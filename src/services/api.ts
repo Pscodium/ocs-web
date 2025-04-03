@@ -156,7 +156,7 @@ class ApiService {
             tags
         }, {
             headers: this.getHeaders(),
-        })
+        });
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get logout');
@@ -172,7 +172,7 @@ class ApiService {
             tags
         }, {
             headers: this.getHeaders(),
-        })
+        });
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get logout');
@@ -184,7 +184,7 @@ class ApiService {
     async deleteArticle(articleId: string | undefined) {
         const res = await this.api.delete(`/article/delete/${articleId}`, {
             headers: this.getHeaders()
-        })
+        });
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get logout');
@@ -196,7 +196,7 @@ class ApiService {
     async deleteFolder(folderId: string | undefined) {
         const res = await this.api.delete(`/tag/delete/${folderId}`, {
             headers: this.getHeaders()
-        })
+        });
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get logout');
@@ -206,7 +206,7 @@ class ApiService {
     }
 
     async getFiles(): Promise<IFileResponse> {
-        const res = await this.api.get(`/storage`)
+        const res = await this.api.get(`/storage`);
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get files');
@@ -243,7 +243,7 @@ class ApiService {
     }
 
     async getFolders(): Promise<IFolderResponse> {
-        const res = await this.api.get(`/storage/folders`)
+        const res = await this.api.get(`/storage/folders`);
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get files');
@@ -258,7 +258,7 @@ class ApiService {
             type
         }, {
             headers: this.getHeaders(),
-        })
+        });
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get files');
@@ -270,7 +270,7 @@ class ApiService {
     async deleteStorageFolder(id: string) {
         const res = await this.api.delete(`/storage/folders/delete/${id}`, {
             headers: this.getHeaders()
-        })
+        });
 
         if (res.status != 200) {
             throw new Error('Unexpected error on delete folder');

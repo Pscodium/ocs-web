@@ -33,7 +33,7 @@ export default function Storage() {
     const [folderType, setFolderType] = useState<FileTypes | undefined>(undefined);
     const [files, setFiles] = useState<IFileResponse | undefined>([]);
     const [file, setFile] = useState<IFile>();
-    const [folders, setFolders] = useState<IFolderResponse>([])
+    const [folders, setFolders] = useState<IFolderResponse>([]);
     const [folder, setFolder] = useState<IFolder>();
     const [step, setStep] = useState<WindowSteps>('FOLDERS');
     const [confirming, setConfirming] = useState(false);
@@ -41,26 +41,28 @@ export default function Storage() {
 
     useEffect(() => {
         if (confirming && timer) {
-        const countdown = setTimeout(() => {
-            setConfirming(false);
-            clearTimeout(timer);
-            setTimer(null);
-        }, 3000);
+            const countdown = setTimeout(() => {
+                setConfirming(false);
+                clearTimeout(timer);
+                setTimer(null);
+            }, 3000);
 
-        return () => clearTimeout(countdown);
+            return () => clearTimeout(countdown);
         }
     }, [confirming, timer]);
 
     useEffect(() => {
-        getFolders()
-        getFiles()
-    }, [])
+        getFolders();
+        getFiles();
+    }, []);
 
     async function getFiles() {
         try {
             const data = await apiService.getFiles();
 
-            if (!data) return;
+            if (!data) {
+                return;
+            }
 
             setFiles(data);
         } catch (err) {
@@ -72,7 +74,9 @@ export default function Storage() {
         try {
             const data = await apiService.getFolders();
 
-            if (!data) return;
+            if (!data) {
+                return;
+            }
 
             setFolders(data);
         } catch (err) {
@@ -82,7 +86,9 @@ export default function Storage() {
 
     async function uploadFileSubmit(file: File | undefined) {
         try {
-            if (!file || !folder) return;
+            if (!file || !folder) {
+                return;
+            }
 
             const uploaded = await apiService.uploadFile(file, folder.id);
 
@@ -93,11 +99,11 @@ export default function Storage() {
                     description: "O arquivo foi enviado com sucesso",
                     className: "outline-none border-none bg-green-600 text-white",
                 });
-    
-                handleSubmitArticle()
+
+                handleSubmitArticle();
                 setOpenUploadDialog(false);
             }
-            
+
         } catch (err) {
             toast({
                 variant: "destructive",
@@ -112,7 +118,9 @@ export default function Storage() {
 
     async function deleteFile() {
         try {
-            if (!file || !folder) return;
+            if (!file || !folder) {
+                return;
+            }
 
             await apiService.deleteFile(file.id, folder.id);
 
@@ -137,10 +145,12 @@ export default function Storage() {
             console.error(err);
         }
     }
-    
+
     async function deleteFolder() {
         try {
-            if (!folder) return;
+            if (!folder) {
+                return;
+            }
             await apiService.deleteStorageFolder(folder.id);
 
             setStep('FOLDERS');
@@ -159,14 +169,16 @@ export default function Storage() {
     }
 
     async function createFolder() {
-        setOpenFolderPopover(false)
+        setOpenFolderPopover(false);
         try {
             const data = await apiService.createFolder({
                 folderName,
                 type: folderType
             });
 
-            if (!data) return;
+            if (!data) {
+                return;
+            }
 
             getFolders();
         } catch (err) {
@@ -180,7 +192,7 @@ export default function Storage() {
     }
 
     function handleOpenFolder(folder: IFolder) {
-        setStep('FILES')
+        setStep('FILES');
         setFolderTitle(folder.name);
 
         setFolder(folder);
@@ -196,7 +208,7 @@ export default function Storage() {
     }
 
     function returnToFolders() {
-        setStep('FOLDERS')
+        setStep('FOLDERS');
         setFolder(undefined);
     }
 
@@ -204,7 +216,7 @@ export default function Storage() {
         if (confirming) {
             deleteFolder();
             setConfirming(false);
-            clearTimeout(timer? timer : undefined);
+            clearTimeout(timer ? timer : undefined);
             setTimer(null);
         } else {
             setConfirming(true);
@@ -214,7 +226,7 @@ export default function Storage() {
 
     return (
         <div className='min-h-screen w-full items-center justify-center'>
-            
+
             <Desktop.Root>
                 <Desktop.Window>
                     {step === 'FOLDERS' && (
@@ -275,11 +287,11 @@ export default function Storage() {
                                         <FaPlus />
                                     </div>
                                     <div onClick={handleDeleteClick} className="absolute inset-y-[25px] ml-[70px] cursor-pointer">
-                                    {confirming? 
-                                        <FaSquareCheck color="#ffcc00" className='h-4 w-4' />
-                                        :
-                                        <FaTrashCan color="#FF3366" className='h-4 w-4' />
-                                    }
+                                        {confirming ?
+                                            <FaSquareCheck color="#ffcc00" className='h-4 w-4' />
+                                            :
+                                            <FaTrashCan color="#FF3366" className='h-4 w-4' />
+                                        }
                                     </div>
                                 </>
                             )}
@@ -308,7 +320,7 @@ export default function Storage() {
                 setOpen={setOpenUploadDialog}
                 onClickSubmit={uploadFileSubmit}
             />
-            <ContentDialog 
+            <ContentDialog
                 file={file}
                 folder={folder}
                 isOpen={openContentDialog}
