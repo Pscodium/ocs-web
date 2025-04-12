@@ -18,6 +18,9 @@ export default defineConfig({
         fs: {
             allow: ['.'],
         },
+        hmr: {
+            overlay: false
+        }
     },
     assetsInclude: ['**/*.md'],
     build: {
