@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { apiService } from "@/services/api";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Folders } from "./components/folders";
 import { Desktop } from "./components/desktop";
 import { FaArrowLeft, FaPen, FaPlus, FaTrashCan } from "react-icons/fa6";
@@ -8,6 +9,7 @@ import PostCreator from "./components/editor";
 import { useAuth } from "@/contexts/auth";
 import { ThreeDots } from "react-loader-spinner";
 import { Dialog } from "./components/dialog";
+import useDidMount from "@/hooks/react/useMount";
 
 export interface ArticlesProps {}
 
@@ -26,33 +28,35 @@ export default function Articles() {
     const [openFolderDeleteDialog, setOpenFolderDeleteDialog] = useState(false);
     const { user } = useAuth();
 
-    useEffect(() => {
-        getTags()
-    }, [])
-
-    async function getTags() {
+    const getTags = useCallback(async () => {
         try {
+            setLoading(true);
             const data = await apiService.getTags();
 
-            if (!data) return;
+            if (!data) {
+                return;
+            }
 
             setTags(data);
+            setLoading(false);
         } catch (err) {
             console.error(err);
         }
-    }
+    }, [setTags, apiService]);
 
-    async function getArticles(tagId: string) {
-        setLoading(true);
+    useDidMount(getTags);
+
+    const getArticles = useCallback(async (tagId: string) => {
         try {
-            const data = await apiService.getArticlesByTagId(tagId)
+            setLoading(true);
+            const data = await apiService.getArticlesByTagId(tagId);
 
             setArticles(data);
             setLoading(false);
         } catch (err) {
             console.error(err);
         }
-    }
+    }, [setLoading, setArticles, apiService]);
 
     async function handleDeleteArticle(articleId: string | undefined) {
         try {
@@ -80,17 +84,17 @@ export default function Articles() {
         }
     }
 
-    function handleOpenFolder(tag: ITag) {
-        setStep('FILES')
+    const handleOpenFolder = useCallback(async (tag: ITag) => {
+        setStep('FILES');
         setFolderTitle(tag.title);
 
         setFolder(tag);
         setArticles([]);
         getArticles(tag.id);
-    }
+    }, [setStep, setFolderTitle, setFolder, setArticles, getArticles]);
 
     function returnToFolders() {
-        setStep('FOLDERS')
+        setStep('FOLDERS');
         setFolder(undefined);
     }
 
@@ -189,7 +193,7 @@ export default function Articles() {
                             <Desktop.WindowHeader>Edit</Desktop.WindowHeader>
                         </>
                     )}
-                    
+
                     {step === 'ARTICLE' ? (
                         <>
                             {article && (
@@ -200,7 +204,20 @@ export default function Articles() {
                         <Desktop.WindowContent>
                             {step === 'FOLDERS' && (
                                 <>
-                                    {tags && (
+                                    {loading && (
+                                        <div className="w-full h-10 flex items-center justify-center">
+                                            <ThreeDots
+                                                height="80"
+                                                width="80"
+                                                radius="9"
+                                                color="#000"
+                                                ariaLabel="three-dots-loading"
+                                                wrapperStyle={{}}
+                                                visible={true}
+                                            />
+                                        </div>
+                                    )}
+                                    {tags && !loading && (
                                         <Folders.Root className="flex flex-wrap gap-3">
                                             {tags.map((tag, index) => (
                                                 <Folders.Body hover={tag.title} key={index} onClick={() => handleOpenFolder(tag)} className="p-5 hover:bg-blue-gray-50 w-32 rounded-md text-center relative cursor-pointer">
@@ -231,7 +248,7 @@ export default function Articles() {
                                             />
                                         </div>
                                     )}
-                                    {articles && (
+                                    {articles && !loading && (
                                         <Folders.Root className="flex flex-wrap gap-3">
                                             {articles.map((article, index) => (
                                                 <Folders.Body hover={article.title} key={index} onClick={() => handleOpenArticle(article)} className="p-5 hover:bg-blue-gray-50 w-28 rounded-md text-center relative cursor-pointer">
@@ -261,7 +278,7 @@ export default function Articles() {
                     )}
                 </Desktop.Window>
             </Desktop.Root>
-            <Dialog.FileDelete isOpen={openFileDeleteDialog} setOpen={setOpenFileDeleteDialog} onClickSubmit={() => handleDeleteArticle(article?.id)}  article={article} />
+            <Dialog.FileDelete isOpen={openFileDeleteDialog} setOpen={setOpenFileDeleteDialog} onClickSubmit={() => handleDeleteArticle(article?.id)} article={article} />
             <Dialog.FolderDelete isOpen={openFolderDeleteDialog} setOpen={setOpenFolderDeleteDialog} onClickSubmit={() => handleDeleteFolder(folder?.id)} folder={folder} />
         </div>
     );
