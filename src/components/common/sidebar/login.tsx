@@ -12,24 +12,24 @@ export default function SidebarLogin() {
     const { openDialog } = useLoginDialog();
 
     return (
-        <div className='absolute flex bottom-0 w-[95%] p-4 items-center justify-center'>
+        <div className='w-full p-4 border-t border-gray-200 bg-white'>
             {isLogged ?
-                <div className='flex flex-row gap-5 justify-between items-center w-[100%]'>
-                    <div onClick={() => { }} className='flex flex-row items-center gap-4 cursor-pointer'>
-                        <Avatar className='rounded-[5px] p-0.5 outline-core-secondary outline outline-[1.3px]'>
+                <div className='flex flex-row gap-5 justify-between items-center'>
+                    <div onClick={() => { }} className='flex flex-row items-center gap-4 cursor-pointer flex-1 min-w-0'>
+                        <Avatar className='rounded-[5px] p-0.5 outline-core-secondary outline outline-[1.3px] flex-shrink-0'>
                             <AvatarImage className='rounded' src={user?.profileIcon || ''} />
                             <AvatarFallback>DP</AvatarFallback>
                         </Avatar>
-                        <Label className='text-black text-md cursor-pointer select-none'>
+                        <Label className='text-black text-md cursor-pointer select-none truncate'>
                             {user?.nickname}
                         </Label>
                     </div>
-                    <Button onClick={Logout} className='p-2 bg-white text-black hover:text-slate-500 hover:bg-white'>
+                    <Button onClick={Logout} className='p-2 bg-white text-black hover:text-slate-500 hover:bg-white flex-shrink-0'>
                         <SlLogout />
                     </Button>
                 </div>
                 :
-                <Button onClick={openDialog} className='bg-white gap-3 hover:bg-white hover fill-black text-black hover:text-slate-500 hover:fill-slate-500'>
+                <Button onClick={openDialog} className='w-full bg-white gap-3 hover:bg-white hover fill-black text-black hover:text-slate-500 hover:fill-slate-500'>
                     <SlLogin />
                     <Label className='font-normal cursor-pointer'>Login</Label>
                 </Button>

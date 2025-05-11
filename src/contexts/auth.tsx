@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import { useToast } from "@/components/ui/use-toast";
 import useDidMount from "@/hooks/react/useMount";
 import { apiService, UserProps, LoginProps } from "@/services/api";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import { useLoginDialog } from "./login.dialog";
 
 interface LoginPropsMutation extends LoginProps {}
@@ -91,7 +92,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
-    useDidMount(async () => {
+    const checkAuth = useCallback(async () => {
         try {
             const loggedUser = await apiService.checkAuth();
 
@@ -105,7 +106,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(null);
             setLogged(false);
         }
-    });
+    }, [apiService, setUser, setLogged]);
+
+    useDidMount(checkAuth);
 
     return (
         <AuthContext.Provider

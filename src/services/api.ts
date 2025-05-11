@@ -206,7 +206,9 @@ class ApiService {
     }
 
     async getFiles(): Promise<IFileResponse> {
-        const res = await this.api.get(`/storage`);
+        const res = await this.api.get(`/storage/files`, {
+            headers: this.getHeaders()
+        });
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get files');
@@ -243,7 +245,9 @@ class ApiService {
     }
 
     async getFolders(): Promise<IFolderResponse> {
-        const res = await this.api.get(`/storage/folders`);
+        const res = await this.api.get(`/storage/folders`, {
+            headers: this.getHeaders()
+        });
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get files');

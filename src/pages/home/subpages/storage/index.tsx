@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+import { useCallback, useEffect, useState } from 'react';
 import { Desktop } from './components/desktop';
 import { Files } from './components/files';
 import { apiService } from '@/services/api';
@@ -13,6 +15,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { IoSend } from "react-icons/io5";
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from '@/components/ui/select';
+import useDidMount from '@/hooks/react/useMount';
+import { ThreeDots } from 'react-loader-spinner';
 
 export interface StorageProps {}
 
@@ -28,6 +32,7 @@ export default function Storage() {
     const [openUploadDialog, setOpenUploadDialog] = useState(false);
     const [openContentDialog, setOpenContentDialog] = useState(false);
     const [openFolderPopover, setOpenFolderPopover] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [folderTitle, setFolderTitle] = useState('');
     const [folderName, setFolderName] = useState('');
     const [folderType, setFolderType] = useState<FileTypes | undefined>(undefined);
@@ -51,38 +56,26 @@ export default function Storage() {
         }
     }, [confirming, timer]);
 
-    useEffect(() => {
-        getFolders();
-        getFiles();
-    }, []);
+    const getFolders = useCallback(
+        async function () {
+            try {
+                setLoading(true);
+                const data = await apiService.getFolders();
 
-    async function getFiles() {
-        try {
-            const data = await apiService.getFiles();
+                if (!data) {
+                    return;
+                }
 
-            if (!data) {
-                return;
+                setFolders(data);
+                setLoading(false);
+            } catch (err) {
+                console.error(err);
             }
+        },
+        [apiService, setFolders, setLoading]
+    );
 
-            setFiles(data);
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    async function getFolders() {
-        try {
-            const data = await apiService.getFolders();
-
-            if (!data) {
-                return;
-            }
-
-            setFolders(data);
-        } catch (err) {
-            console.error(err);
-        }
-    }
+    useDidMount(getFolders);
 
     async function uploadFileSubmit(file: File | undefined) {
         try {
@@ -262,17 +255,27 @@ export default function Storage() {
                                 Storage
                             </Desktop.WindowHeader>
                             <Desktop.WindowContent>
-                                <Folders.Root className="flex flex-wrap gap-3">
-                                    {folders.map((folder, index) => (
-                                        <Folders.Body hover={folder.name} key={index} onClick={() => handleOpenFolder(folder)} className="p-5 hover:bg-blue-gray-50 w-32 rounded-md text-center relative cursor-pointer">
-                                            <Folders.Icon hex={folder.hex} />
-                                            {folder.filesCount != undefined && (
-                                                <Folders.Badge>{folder.filesCount}</Folders.Badge>
-                                            )}
-                                            <Folders.Title>{folder.name}</Folders.Title>
-                                        </Folders.Body>
-                                    ))}
-                                </Folders.Root>
+                                {loading && (
+                                    <div className='w-full h-10 flex items-center justify-center'>
+                                        <ThreeDots height='80' width='80' radius='9' color='#000' ariaLabel='three-dots-loading' wrapperStyle={{}} visible={true} />
+                                    </div>
+                                )}
+                                {folders && !loading && (
+                                    <Folders.Root className='flex flex-wrap gap-3'>
+                                        {folders.map((folder, index) => (
+                                            <Folders.Body
+                                                hover={folder.name}
+                                                key={index}
+                                                onClick={() => handleOpenFolder(folder)}
+                                                className='p-5 hover:bg-blue-gray-50 w-32 rounded-md text-center relative cursor-pointer'
+                                            >
+                                                <Folders.Icon hex={folder.hex} />
+                                                {folder.filesCount != undefined && <Folders.Badge>{folder.filesCount}</Folders.Badge>}
+                                                <Folders.Title>{folder.name}</Folders.Title>
+                                            </Folders.Body>
+                                        ))}
+                                    </Folders.Root>
+                                )}
                             </Desktop.WindowContent>
                         </>
                     )}

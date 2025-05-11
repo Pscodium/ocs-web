@@ -21,9 +21,15 @@ export default function Home() {
 
     return (
         <>
-            <div className='bg-forum-bg flex flex-row h-full w-full justify-between'>
-                {windowWidth < 1280 ? <Sidebar.DrawerSidebar /> : <Sidebar.Default />}
-                <main className='bg-white overflow-y-auto w-full min-h-screen'>
+            <div className='flex h-screen overflow-hidden bg-white'>
+                {windowWidth < 1280 ? (
+                    <Sidebar.DrawerSidebar />
+                ) : (
+                    <div className='fixed left-0 top-0 h-full z-50'>
+                        <Sidebar.Default />
+                    </div>
+                )}
+                <main className='flex-1 overflow-auto bg-white' style={{ marginLeft: windowWidth >= 1280 ? '320px' : '0' }}>
                     <Outlet />
                 </main>
                 <Toaster />
