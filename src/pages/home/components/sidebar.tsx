@@ -15,8 +15,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 export interface SidebarProps extends React.HTMLAttributes<HTMLElement> { }
 
 export default function Sidebar(props: SidebarProps) {
-    const { isLogged, user } = useAuth();
-    const { Logout } = useAuth();
+    const { isLogged, user, Logout } = useAuth();
     const { openDialog } = useLoginDialog();
 
     return (

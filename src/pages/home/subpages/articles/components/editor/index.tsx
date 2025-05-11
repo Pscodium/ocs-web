@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import MDEditor, { ICommand } from '@uiw/react-md-editor';
 import '@/styles/markdown-editor.css';
 import '@/styles/markdown-preview.css';
-import { FaBookOpen } from "react-icons/fa";
-import { FaEdit } from "react-icons/fa";
-import { IoSend } from "react-icons/io5";
-import { SEPARATORS, WithContext as ReactTags } from 'react-tag-input'
+import { FaBookOpen } from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
+import { IoSend } from 'react-icons/io5';
+import { SEPARATORS, WithContext as ReactTags } from 'react-tag-input';
 import { apiService } from '@/services/api';
 
 const codePreview: ICommand = {
-    name: "removed",
-    keyCommand: "removed",
-    value: "removed",
+    name: 'removed',
+    keyCommand: 'removed',
+    value: 'removed',
 };
 
 interface PostCreatorProps {
@@ -29,7 +29,7 @@ export interface Tag {
 }
 
 export default function PostCreator({ tags, handleSubmitArticle, selectedTag, edit, article }: PostCreatorProps) {
-    const [value, setValue] = React.useState<string | undefined>("");
+    const [value, setValue] = React.useState<string | undefined>('');
     const [viewHeight, setViewHeight] = React.useState(0);
     const [title, setTitle] = React.useState('');
     const [tagList, setTagList] = React.useState<Array<Tag>>([]);
@@ -38,37 +38,39 @@ export default function PostCreator({ tags, handleSubmitArticle, selectedTag, ed
         return {
             id: tag.id,
             text: tag.title,
-            className: ''
+            className: '',
         };
-    })
+    });
 
     useEffect(() => {
         if (selectedTag) {
-            setTagList([{
-                text: selectedTag?.title,
-                id: selectedTag?.id,
-                className: ''
-            }]);
+            setTagList([
+                {
+                    text: selectedTag?.title,
+                    id: selectedTag?.id,
+                    className: '',
+                },
+            ]);
         }
-    }, [selectedTag])
+    }, [selectedTag]);
 
     useEffect(() => {
         if (edit && article) {
             setValue(article.body);
             setTitle(article.title);
-            
+
             if (article.Tags) {
                 const newTagList = article.Tags?.map((tag) => {
                     return {
                         text: tag?.title,
                         id: tag?.id,
-                        className: ''
-                    }
+                        className: '',
+                    };
                 });
-                setTagList(newTagList)
+                setTagList(newTagList);
             }
         }
-    }, [edit, article])
+    }, [edit, article]);
 
     useEffect(() => {
         setViewHeight(window.innerHeight - 120);
@@ -110,7 +112,7 @@ export default function PostCreator({ tags, handleSubmitArticle, selectedTag, ed
     const handleTagClick = (index: number) => {
         console.log('The tag at index ' + index + ' was clicked');
     };
-    
+
     const onClearAll = () => {
         setTagList([]);
     };
@@ -120,27 +122,27 @@ export default function PostCreator({ tags, handleSubmitArticle, selectedTag, ed
             if (edit && article) {
                 await apiService.updateArticle({
                     body: String(value),
-                    tags: tagList.map(tag => {
-                        return {title: tag.text };
+                    tags: tagList.map((tag) => {
+                        return { title: tag.text };
                     }),
                     title: title,
-                    articleId: article.id
+                    articleId: article.id,
                 });
-    
+
                 handleSubmitArticle();
                 return;
             }
             await apiService.createArticle({
                 body: String(value),
-                tags: tagList.map(tag => {
-                    return {title: tag.text };
+                tags: tagList.map((tag) => {
+                    return { title: tag.text };
                 }),
-                title: title
+                title: title,
             });
 
             handleSubmitArticle();
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     }
 
@@ -155,15 +157,15 @@ export default function PostCreator({ tags, handleSubmitArticle, selectedTag, ed
                 </div>
             )}
             <div className='absolute w-full h-10 left-0 top-[-40px] z-[999]'>
-                <textarea 
-                    placeholder='Type the title here' 
-                    style={{ textAlign: editMode? 'start' : 'center' }} 
+                <textarea
+                    placeholder='Type the title here'
+                    style={{ textAlign: editMode ? 'start' : 'center' }}
                     className='h-full w-full text-[28px] resize-none items-center justify-center overflow-hidden outline-none px-3'
                     value={title}
                     onChange={(ev) => setTitle(ev.currentTarget.value)}
                 />
             </div>
-            <div data-color-mode="light" className="flex h-full">
+            <div data-color-mode='light' className='flex h-full'>
                 <MDEditor
                     visibleDragbar={false}
                     className='w-full h-full'
@@ -171,12 +173,12 @@ export default function PostCreator({ tags, handleSubmitArticle, selectedTag, ed
                     hideToolbar={editMode ? false : true}
                     height={viewHeight / 1.3}
                     onChange={setValue}
-                    preview={editMode ? "edit" : "preview"}
+                    preview={editMode ? 'edit' : 'preview'}
                     extraCommands={[codePreview]}
                 />
             </div>
             <div className='p-2'>
-                <ReactTags 
+                <ReactTags
                     classNames={{
                         tags: 'tagsClass',
                         tagInput: 'tagInputClass flex flex-col gap-1',
@@ -197,8 +199,8 @@ export default function PostCreator({ tags, handleSubmitArticle, selectedTag, ed
                     handleDrag={handleDrag}
                     handleTagClick={handleTagClick}
                     onTagUpdate={onTagUpdate}
-                    separators={[ SEPARATORS.ENTER, SEPARATORS.COMMA ]}
-                    inputFieldPosition="bottom"
+                    separators={[SEPARATORS.ENTER, SEPARATORS.COMMA]}
+                    inputFieldPosition='bottom'
                     editable
                     clearAll
                     onClearAll={onClearAll}

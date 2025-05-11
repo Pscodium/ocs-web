@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 
 export default function useLogin() {
     const mutate = useMutation({
-        mutationFn: ({ email, password }: LoginProps) => apiService.login({ email, password }),
+        mutationFn: ({ login, password }: LoginProps) => apiService.login({ login, password }),
     });
 
     return mutate;

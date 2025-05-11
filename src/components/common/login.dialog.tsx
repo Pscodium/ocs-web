@@ -50,7 +50,7 @@ export default function LoginDialog() {
 
         try {
             const login = await Login({
-                email: inputs.email,
+                login: inputs.email,
                 password: inputs.password,
             });
             if (!login) {

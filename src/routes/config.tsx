@@ -7,7 +7,7 @@ import routes from './index';
 const Home = lazy(() => import('@/pages/home/index'));
 
 export default function Router() {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 500);

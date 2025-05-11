@@ -3,14 +3,14 @@
 import { useToast } from "@/components/ui/use-toast";
 import useDidMount from "@/hooks/react/useMount";
 import { apiService, UserProps, LoginProps } from "@/services/api";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import { useLoginDialog } from "./login.dialog";
 
 interface LoginPropsMutation extends LoginProps {}
 
 interface AuthContextProps {
     user: UserProps | null;
-    Login: ({ email, password }: LoginPropsMutation) => Promise<boolean>;
+    Login: ({ login, password }: LoginPropsMutation) => Promise<boolean>;
     Logout: () => void;
     isLogged: boolean;
 }
@@ -24,10 +24,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     const { closeDialog } = useLoginDialog();
 
 
-    async function Login({ email, password }: LoginPropsMutation) {
+    async function Login({ login, password }: LoginPropsMutation) {
         try {
 
-            const user = await apiService.login({ email, password });
+            const user = await apiService.login({ login, password });
             if (!user) {
                 setLogged(false);
                 toast({
@@ -91,11 +91,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
-    useDidMount(async () => {
+    const checkAuth = useCallback(async () => {
         try {
             const loggedUser = await apiService.checkAuth();
 
             if (!loggedUser) {
+                setUser(null);
+                setLogged(false);
                 return;
             }
 
@@ -105,7 +107,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(null);
             setLogged(false);
         }
-    });
+    }, [apiService, setUser, setLogged]);
+
+    useDidMount(checkAuth);
 
     return (
         <AuthContext.Provider

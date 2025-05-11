@@ -20,11 +20,12 @@ interface UserProps {
 interface FormProps {
     nickname?: string;
     email?: string;
+    login: string;
     password?: string;
 }
 
 interface LoginProps {
-    email: string;
+    login: string;
     password: string;
 }
 
@@ -100,10 +101,10 @@ class ApiService {
         return response;
     }
 
-    async login({ email, password }: FormProps): Promise<AxiosResponse<UserProps, any>> {
+    async login({ login, password }: FormProps): Promise<AxiosResponse<UserProps, any>> {
         this.api.defaults.withCredentials = true;
         const res = await this.api.post('/login', {
-            email,
+            login,
             password
         }, {
             headers: this.getHeaders("application/json")
@@ -130,7 +131,7 @@ class ApiService {
     }
 
     async getTags(): Promise<ITagResponse> {
-        const res = await this.api.get('/list-all/tags');
+        const res = await this.api.get('/tags');
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get logout');
@@ -140,7 +141,7 @@ class ApiService {
     }
 
     async getArticlesByTagId(tagId: string): Promise<IArticleResponse> {
-        const res = await this.api.get('/list/articles/' + tagId);
+        const res = await this.api.get('/articles/tag/' + tagId);
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get logout');
@@ -206,7 +207,7 @@ class ApiService {
     }
 
     async getFiles(): Promise<IFileResponse> {
-        const res = await this.api.get(`/storage`);
+        const res = await this.api.get(`/storage/files`);
 
         if (res.status != 200) {
             throw new Error('Unexpected error on get files');

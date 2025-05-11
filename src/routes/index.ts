@@ -9,6 +9,7 @@ const Markdown = lazy(() => import('@/pages/home/subpages/tools/subpages/markdow
 const UuidGenerator = lazy(() => import('@/pages/home/subpages/tools/subpages/uuid'));
 const DateTime = lazy(() => import('@/pages/home/subpages/tools/subpages/datetime'));
 
+
 const coreRoutes = [
     {
         path: '/tools',

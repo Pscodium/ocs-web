@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Desktop } from './components/desktop';
 import { Files } from './components/files';
 import { apiService } from '@/services/api';
@@ -11,16 +11,18 @@ import { Folders } from './components/folders';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { IoSend } from "react-icons/io5";
+import { IoSend } from 'react-icons/io5';
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from '@/components/ui/select';
+import useDidMount from '@/hooks/react/useMount';
+import { ThreeDots } from 'react-loader-spinner';
 
 export interface StorageProps {}
 
-export type WindowSteps = "FOLDERS" | "FILES";
+export type WindowSteps = 'FOLDERS' | 'FILES';
 enum Mimetypes {
-    Video = "video/*",
-    Audio = "audio/*",
-    Image = "image/*"
+    Video = 'video/*',
+    Audio = 'audio/*',
+    Image = 'image/*',
 }
 
 export default function Storage() {
@@ -28,6 +30,7 @@ export default function Storage() {
     const [openUploadDialog, setOpenUploadDialog] = useState(false);
     const [openContentDialog, setOpenContentDialog] = useState(false);
     const [openFolderPopover, setOpenFolderPopover] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [folderTitle, setFolderTitle] = useState('');
     const [folderName, setFolderName] = useState('');
     const [folderType, setFolderType] = useState<FileTypes | undefined>(undefined);
@@ -51,38 +54,26 @@ export default function Storage() {
         }
     }, [confirming, timer]);
 
-    useEffect(() => {
-        getFolders();
-        getFiles();
-    }, []);
+    const getFolders = useCallback(
+        async function () {
+            try {
+                setLoading(true);
+                const data = await apiService.getFolders();
 
-    async function getFiles() {
-        try {
-            const data = await apiService.getFiles();
+                if (!data) {
+                    return;
+                }
 
-            if (!data) {
-                return;
+                setFolders(data);
+                setLoading(false);
+            } catch (err) {
+                console.error(err);
             }
+        },
+        [apiService, setFolders]
+    );
 
-            setFiles(data);
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    async function getFolders() {
-        try {
-            const data = await apiService.getFolders();
-
-            if (!data) {
-                return;
-            }
-
-            setFolders(data);
-        } catch (err) {
-            console.error(err);
-        }
-    }
+    useDidMount(getFolders);
 
     async function uploadFileSubmit(file: File | undefined) {
         try {
@@ -94,22 +85,21 @@ export default function Storage() {
 
             if (uploaded) {
                 toast({
-                    variant: "destructive",
-                    title: "SUCESSO",
-                    description: "O arquivo foi enviado com sucesso",
-                    className: "outline-none border-none bg-green-600 text-white",
+                    variant: 'destructive',
+                    title: 'SUCESSO',
+                    description: 'O arquivo foi enviado com sucesso',
+                    className: 'outline-none border-none bg-green-600 text-white',
                 });
 
                 handleSubmitArticle();
                 setOpenUploadDialog(false);
             }
-
         } catch (err) {
             toast({
-                variant: "destructive",
-                title: "ERRO",
-                description: "Erro ao tentar enviar o arquivo",
-                className: "outline-none border-none bg-red-600 text-white",
+                variant: 'destructive',
+                title: 'ERRO',
+                description: 'Erro ao tentar enviar o arquivo',
+                className: 'outline-none border-none bg-red-600 text-white',
             });
 
             console.error(err);
@@ -125,10 +115,10 @@ export default function Storage() {
             await apiService.deleteFile(file.id, folder.id);
 
             toast({
-                variant: "destructive",
-                title: "SUCESSO",
-                description: "O arquivo foi deletado com sucesso",
-                className: "outline-none border-none bg-green-600 text-white",
+                variant: 'destructive',
+                title: 'SUCESSO',
+                description: 'O arquivo foi deletado com sucesso',
+                className: 'outline-none border-none bg-green-600 text-white',
             });
             setOpenContentDialog(false);
             setStep('FOLDERS');
@@ -136,10 +126,10 @@ export default function Storage() {
             getFolders();
         } catch (err) {
             toast({
-                variant: "destructive",
-                title: "ERRO",
-                description: "Erro ao tentar deletar o arquivo",
-                className: "outline-none border-none bg-red-600 text-white",
+                variant: 'destructive',
+                title: 'ERRO',
+                description: 'Erro ao tentar deletar o arquivo',
+                className: 'outline-none border-none bg-red-600 text-white',
             });
 
             console.error(err);
@@ -158,10 +148,10 @@ export default function Storage() {
             getFolders();
         } catch (err) {
             toast({
-                variant: "destructive",
-                title: "ERRO",
-                description: "Erro ao tentar deletar o arquivo",
-                className: "outline-none border-none bg-red-600 text-white",
+                variant: 'destructive',
+                title: 'ERRO',
+                description: 'Erro ao tentar deletar o arquivo',
+                className: 'outline-none border-none bg-red-600 text-white',
             });
 
             console.error(err);
@@ -173,7 +163,7 @@ export default function Storage() {
         try {
             const data = await apiService.createFolder({
                 folderName,
-                type: folderType
+                type: folderType,
             });
 
             if (!data) {
@@ -226,13 +216,12 @@ export default function Storage() {
 
     return (
         <div className='min-h-screen w-full items-center justify-center'>
-
             <Desktop.Root>
                 <Desktop.Window>
                     {step === 'FOLDERS' && (
                         <>
                             {user && user?.role === 'owner' && (
-                                <div className="absolute inset-y-[25px] ml-1 cursor-pointer">
+                                <div className='absolute inset-y-[25px] ml-1 cursor-pointer'>
                                     <Popover onOpenChange={() => setOpenFolderPopover(!openFolderPopover)} open={openFolderPopover}>
                                         <PopoverTrigger>
                                             <FaPlus />
@@ -244,9 +233,9 @@ export default function Storage() {
                                                     <IoSend color='#ffffff' />
                                                 </Button>
                                             </div>
-                                            <Select value={folderType} onValueChange={(value) => setFolderType(value as FileTypes)} >
+                                            <Select value={folderType} onValueChange={(value) => setFolderType(value as FileTypes)}>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Tipo" />
+                                                    <SelectValue placeholder='Tipo' />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value={Mimetypes.Video}>Video</SelectItem>
@@ -258,75 +247,70 @@ export default function Storage() {
                                     </Popover>
                                 </div>
                             )}
-                            <Desktop.WindowHeader>
-                                Storage
-                            </Desktop.WindowHeader>
+                            <Desktop.WindowHeader>Storage</Desktop.WindowHeader>
                             <Desktop.WindowContent>
-                                <Folders.Root className="flex flex-wrap gap-3">
-                                    {folders.map((folder, index) => (
-                                        <Folders.Body hover={folder.name} key={index} onClick={() => handleOpenFolder(folder)} className="p-5 hover:bg-blue-gray-50 w-32 rounded-md text-center relative cursor-pointer">
-                                            <Folders.Icon hex={folder.hex} />
-                                            {folder.filesCount != undefined && (
-                                                <Folders.Badge>{folder.filesCount}</Folders.Badge>
-                                            )}
-                                            <Folders.Title>{folder.name}</Folders.Title>
-                                        </Folders.Body>
-                                    ))}
-                                </Folders.Root>
+                                {loading && (
+                                    <div className='w-full h-10 flex items-center justify-center'>
+                                        <ThreeDots height='80' width='80' radius='9' color='#000' ariaLabel='three-dots-loading' wrapperStyle={{}} visible={true} />
+                                    </div>
+                                )}
+                                {folders && !loading && (
+                                    <Folders.Root className='flex flex-wrap gap-3'>
+                                        {folders.map((folder, index) => (
+                                            <Folders.Body
+                                                hover={folder.name}
+                                                key={index}
+                                                onClick={() => handleOpenFolder(folder)}
+                                                className='p-5 hover:bg-blue-gray-50 w-32 rounded-md text-center relative cursor-pointer'
+                                            >
+                                                <Folders.Icon hex={folder.hex} />
+                                                {folder.filesCount != undefined && <Folders.Badge>{folder.filesCount}</Folders.Badge>}
+                                                <Folders.Title>{folder.name}</Folders.Title>
+                                            </Folders.Body>
+                                        ))}
+                                    </Folders.Root>
+                                )}
                             </Desktop.WindowContent>
                         </>
                     )}
                     {step === 'FILES' && (
                         <>
-                            <div onClick={returnToFolders} className="absolute inset-y-[25px] ml-2 cursor-pointer">
+                            <div onClick={returnToFolders} className='absolute inset-y-[25px] ml-2 cursor-pointer'>
                                 <FaArrowLeft />
                             </div>
                             {user && user?.role === 'owner' && (
                                 <>
-                                    <div onClick={() => setOpenUploadDialog(true)} className="absolute inset-y-[25px] ml-9 cursor-pointer">
+                                    <div onClick={() => setOpenUploadDialog(true)} className='absolute inset-y-[25px] ml-9 cursor-pointer'>
                                         <FaPlus />
                                     </div>
-                                    <div onClick={handleDeleteClick} className="absolute inset-y-[25px] ml-[70px] cursor-pointer">
-                                        {confirming ?
-                                            <FaSquareCheck color="#ffcc00" className='h-4 w-4' />
-                                            :
-                                            <FaTrashCan color="#FF3366" className='h-4 w-4' />
-                                        }
+                                    <div onClick={handleDeleteClick} className='absolute inset-y-[25px] ml-[70px] cursor-pointer'>
+                                        {confirming ? <FaSquareCheck color='#ffcc00' className='h-4 w-4' /> : <FaTrashCan color='#FF3366' className='h-4 w-4' />}
                                     </div>
                                 </>
                             )}
-                            <Desktop.WindowHeader>
-                                {folderTitle}
-                            </Desktop.WindowHeader>
+                            <Desktop.WindowHeader>{folderTitle}</Desktop.WindowHeader>
                             <Desktop.WindowContent>
-                                <Files.Root className="flex flex-wrap gap-3">
-                                    {files && files.map((object, index) => (
-                                        <Files.Body onClick={() => openFileDialog(object)} hover={object.name} key={index} className="p-5 hover:bg-blue-gray-50 w-32 rounded-md text-center relative cursor-pointer">
-                                            <Files.Icon url={object.url} type={folder?.type} />
-                                            {folder?.type && folder.type !== 'video/*' && (
-                                                <Files.Title>{object.name}</Files.Title>
-                                            )}
-                                        </Files.Body>
-                                    ))}
+                                <Files.Root className='flex flex-wrap gap-3'>
+                                    {files &&
+                                        files.map((object, index) => (
+                                            <Files.Body
+                                                onClick={() => openFileDialog(object)}
+                                                hover={object.name}
+                                                key={index}
+                                                className='p-5 hover:bg-blue-gray-50 w-32 rounded-md text-center relative cursor-pointer'
+                                            >
+                                                <Files.Icon url={object.url} type={folder?.type} />
+                                                {folder?.type && folder.type !== 'video/*' && <Files.Title>{object.name}</Files.Title>}
+                                            </Files.Body>
+                                        ))}
                                 </Files.Root>
                             </Desktop.WindowContent>
                         </>
                     )}
                 </Desktop.Window>
             </Desktop.Root>
-            <UploadDialog
-                isOpen={openUploadDialog}
-                mimetype={folder?.type}
-                setOpen={setOpenUploadDialog}
-                onClickSubmit={uploadFileSubmit}
-            />
-            <ContentDialog
-                file={file}
-                folder={folder}
-                isOpen={openContentDialog}
-                setOpen={setOpenContentDialog}
-                deleteFile={deleteFile}
-            />
+            <UploadDialog isOpen={openUploadDialog} mimetype={folder?.type} setOpen={setOpenUploadDialog} onClickSubmit={uploadFileSubmit} />
+            <ContentDialog file={file} folder={folder} isOpen={openContentDialog} setOpen={setOpenContentDialog} deleteFile={deleteFile} />
         </div>
     );
 }
