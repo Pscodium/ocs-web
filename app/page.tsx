@@ -12,7 +12,7 @@ export default function Home() {
   const config = getConfig();
 
   return (
-    <main className="min-h-screen bg-background select-text">
+    <main className="min-h-screen bg-background select-none">
       <div>{!config ? <p>Loading...</p> : 
       <>
         <Navigation />
