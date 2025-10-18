@@ -6,17 +6,24 @@ import { Contact } from "@/components/contact"
 import { Navigation } from "@/components/navigation"
 import { getConfig } from "@/lib/config"
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   const config = getConfig();
 
   return (
     <main className="min-h-screen bg-background select-text">
-      <Navigation />
-      <Hero config={config} />
-      <About config={config} />
-      <Skills config={config} />
-      <Experience config={config} />
-      <Contact config={config} />
+      <div>{!config ? <p>Loading...</p> : 
+      <>
+        <Navigation />
+        <Hero config={config} />
+        <About config={config} />
+        <Skills config={config} />
+        <Experience config={config} />
+        <Contact config={config} />
+      </>
+      }</div>
+      
     </main>
   )
 }
