@@ -13,7 +13,7 @@ RUN pnpm install
 
 # cria pasta e arquivo config.json temporário
 RUN mkdir -p /app/data
-RUN [ -f /app/data/config.json ] || echo '{}' > /app/data/config.json
+RUN mkdir -p /app/data && echo '{"items":[]}' > /app/data/config.json
 
 
 # Copia o restante do código e builda o Next.js
