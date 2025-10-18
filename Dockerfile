@@ -11,6 +11,11 @@ COPY package.json pnpm-lock.yaml ./
 # Instala todas as dependências (dev + prod)
 RUN pnpm install
 
+# cria pasta e arquivo config.json temporário
+RUN mkdir -p /app/data
+RUN [ -f /app/data/config.json ] || echo '{}' > /app/data/config.json
+
+
 # Copia o restante do código e builda o Next.js
 COPY . .
 RUN pnpm build
