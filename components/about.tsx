@@ -9,7 +9,7 @@ import { formatList } from "@/lib/list";
 export function About({ config }: { config: IConfig }) {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
-  const experienceYears = moment().diff(moment(config.experiences[config.experiences.length - 1].endDate), "years");
+  const experienceYears = moment().diff(moment(config.experiences[config.experiences.length - 1].startDate), "years");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
