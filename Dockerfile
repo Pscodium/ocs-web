@@ -9,7 +9,7 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 
 # Instala todas as dependências (dev + prod)
-RUN pnpm install
+RUN pnpm install --ignore-scripts
 
 # cria pasta e arquivo config.json temporário
 RUN mkdir -p /app/data
@@ -31,7 +31,7 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 
 # Instala apenas dependências de produção
-RUN pnpm install --prod
+RUN pnpm install --prod --ignore-scripts
 
 # Copia build e public do stage anterior
 COPY --from=builder /app/.next ./.next
