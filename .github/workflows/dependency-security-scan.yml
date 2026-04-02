@@ -42,7 +42,7 @@ jobs:
         run: |
           set -euo pipefail
           PATTERN='xmrig|zzx\.zip|curl[[:space:]].*\|[[:space:]]*(bash|sh)|wget[[:space:]].*\|[[:space:]]*(bash|sh)|Invoke-Expression|IEX\(|powershell[[:space:]]+-enc|nc[[:space:]]+-e'
-          if grep -RInE --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exclude-dir=build --exclude-dir=.next --exclude-dir=target "$PATTERN" .; then
+          if grep -RInE --exclude=dependency-security-scan.yml --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exclude-dir=build --exclude-dir=.next --exclude-dir=target "$PATTERN" .; then
             echo "Suspicious indicator found"
             exit 1
           fi
