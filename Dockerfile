@@ -21,6 +21,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 RUN npm install -g pnpm
+RUN addgroup -S app && adduser -S app -G app
 
 COPY package.json pnpm-lock.yaml ./
 
@@ -31,14 +32,16 @@ RUN pnpm install --prod --ignore-scripts
 RUN pnpm rebuild
 
 # 👇 copia build
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.mjs ./next.config.mjs
+COPY --from=builder --chown=app:app /app/.next ./.next
+COPY --from=builder --chown=app:app /app/public ./public
+COPY --from=builder --chown=app:app /app/next.config.mjs ./next.config.mjs
 
 # 👇 IMPORTANTE: copia teus dados/config
-COPY --from=builder /app/data ./data
+COPY --from=builder --chown=app:app /app/data ./data
 
 ENV PORT=3000
 EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 CMD node -e "const n=require('net');const p=process.env.PORT||3000;const s=n.connect(p,'127.0.0.1');s.on('connect',()=>{s.destroy();process.exit(0)});s.on('error',()=>process.exit(1));setTimeout(()=>process.exit(1),4000);"
+USER app
 
 CMD ["pnpm", "start"]
